@@ -36,6 +36,7 @@ object Form1: TForm1
       Width = 1020
       Height = 563
       Align = alClient
+      ColCount = 1
       FixedCols = 0
       RowCount = 1
       FixedRows = 0
@@ -44,6 +45,7 @@ object Form1: TForm1
       Font.Height = -13
       Font.Name = 'Tahoma'
       Font.Style = []
+      Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goDrawFocusSelected, goRowSizing, goColSizing, goRowMoving, goColMoving, goEditing, goFixedRowDefAlign]
       ParentFont = False
       TabOrder = 1
     end

@@ -40,29 +40,40 @@ begin
             if temp > max then
                 max := temp;
         end;
-    	grid.colWidths[i] := max + grid.gridLineWidth + 1;
+    	grid.colWidths[i] := max + grid.gridLineWidth + 30;
     end;
 end;
 
 procedure Excel_Open(file_name: string; grid: TStringGrid);
 const xlCellTypeLastCell = $0000000B;
 var
-	Excel, Sheet:		OleVariant;
-    i, j, temp, max:	integer;
+	Excel, Sheet:		   	OleVariant;
+    i, j, grid_cursor_i:	integer;
 begin
     Excel := CreateOleObject('Excel.Application');
+    grid_cursor_i := 0;
+    Grid.RowCount := 0;
+    Grid.ColCount := 0;
 
-	Excel.Workbooks.Open(file_name, 0, True);
+    Excel.Workbooks.Open(file_name);
 
-    Sheet := Excel.Workbooks[ExtractFileName(file_name)].WorkSheets[1];
-    Sheet.Cells.SpecialCells(xlCellTypeLastCell, EmptyParam).Activate;
+    for var sheet_number: integer := 1 to Excel.Workbooks[ExtractFileName(file_name)].Sheets.Count do
+    begin
+        Sheet := Excel.Workbooks[ExtractFileName(file_name)].WorkSheets[sheet_number];
+        Sheet.Activate;
+        Sheet.Cells.SpecialCells(xlCellTypeLastCell, EmptyParam).Activate;
 
-    Grid.RowCount := Excel.ActiveCell.Row;
-    Grid.ColCount := Excel.ActiveCell.Column;
+        Grid.RowCount := Grid.RowCount + Excel.ActiveCell.Row;
+        if Excel.ActiveCell.Column >= Grid.ColCount then
+			Grid.ColCount := Excel.ActiveCell.Column;
 
-    for i := 0 to Grid.RowCount - 1 do
-        for j := 0 to Grid.ColCount - 1 do
-            Grid.Cells[j, i] := Sheet.Cells[i+1, j+1];
+        for i := 0 to Excel.ActiveCell.Row - 1 do
+        begin
+        	for j := 0 to Excel.ActiveCell.Column - 1 do
+        		Grid.Cells[j, grid_cursor_i] := Sheet.Cells[i+1, j+1];
+            Inc(grid_cursor_i);
+        end;
+    end;
 
     SetMaxColumnWidth(grid);
 
