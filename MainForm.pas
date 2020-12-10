@@ -47,8 +47,8 @@ end;
 procedure Excel_Open(file_name: string; grid: TStringGrid);
 const xlCellTypeLastCell = $0000000B;
 var
-	Excel, Sheet:							OleVariant;
-    i, j, last_row, last_column, temp, max:	integer;
+	Excel, Sheet:		OleVariant;
+    i, j, temp, max:	integer;
 begin
     Excel := CreateOleObject('Excel.Application');
 
@@ -57,15 +57,12 @@ begin
     Sheet := Excel.Workbooks[ExtractFileName(file_name)].WorkSheets[1];
     Sheet.Cells.SpecialCells(xlCellTypeLastCell, EmptyParam).Activate;
 
-    last_row := Excel.ActiveCell.Row;
-    last_column := Excel.ActiveCell.Column;
+    Grid.RowCount := Excel.ActiveCell.Row;
+    Grid.ColCount := Excel.ActiveCell.Column;
 
-    Grid.RowCount := last_row;
-    Grid.ColCount := last_column;
-
-    for i := 1 to last_row do
-        for j := 1 to last_column do
-            Grid.Cells[j-1, i-1] := Sheet.Cells[i, j];
+    for i := 0 to Grid.RowCount - 1 do
+        for j := 0 to Grid.ColCount - 1 do
+            Grid.Cells[j, i] := Sheet.Cells[i+1, j+1];
 
     SetMaxColumnWidth(grid);
 
