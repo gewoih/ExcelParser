@@ -47,8 +47,8 @@ end;
 procedure Excel_Open(file_name: string; grid: TStringGrid);
 const xlCellTypeLastCell = $0000000B;
 var
-	Excel, Sheet:		   	OleVariant;
-    i, j, grid_cursor_i:	integer;
+	Excel, Sheet:		   			OleVariant;
+    i, j, grid_cursor_i, temp, max:	integer;
 begin
     Excel := CreateOleObject('Excel.Application');
     grid_cursor_i := 0;
@@ -63,19 +63,26 @@ begin
         Sheet.Activate;
         Sheet.Cells.SpecialCells(xlCellTypeLastCell, EmptyParam).Activate;
 
-        Grid.RowCount := Grid.RowCount + Excel.ActiveCell.Row;
+        Grid.RowCount := Grid.RowCount + Sheet.UsedRange.Rows.Count;
         if Excel.ActiveCell.Column >= Grid.ColCount then
-			Grid.ColCount := Excel.ActiveCell.Column;
+			Grid.ColCount := Sheet.UsedRange.Columns.Count;
 
-        for i := 0 to Excel.ActiveCell.Row - 1 do
+        for i := 0 to Grid.ColCount - 1 do
         begin
-        	for j := 0 to Excel.ActiveCell.Column - 1 do
-        		Grid.Cells[j, grid_cursor_i] := Sheet.Cells[i+1, j+1];
+        	max := 0;
+        	for j := 0 to Grid.RowCount - 1 do
+        	begin
+        		Grid.Cells[j, i] := Sheet.Cells[j+1, i+1];
+//              temp := Grid.Canvas.TextWidth(Grid.Cells[j, grid_cursor_i]);
+//            	if temp > max then
+//            		max := temp;
+            end;
+            //grid.ColWidths[i - 1] := max + grid.gridLineWidth + 30;
             Inc(grid_cursor_i);
         end;
     end;
 
-    SetMaxColumnWidth(grid);
+    //SetMaxColumnWidth(grid);
 
     Excel.Quit;
     Excel := Unassigned;
