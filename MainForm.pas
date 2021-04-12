@@ -5,92 +5,116 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls, System.Win.ComObj,
-  Vcl.Grids;
+  Vcl.Grids, VirtualTrees, TFlatPanelUnit, Vcl.Menus;
 
 type
   TForm1 = class(TForm)
     MainPanel: TPanel;
-    ChooseButton: TButton;
-    StringGrid1: TStringGrid;
+    btExcelOpen: TButton;
     OpenDialog1: TOpenDialog;
-    procedure ChooseButtonClick(Sender: TObject);
+    SuppliersTree: TVirtualStringTree;
+    PopupMenu1: TPopupMenu;
+    miAddSupplier: TMenuItem;
+    PreviewTree: TVirtualStringTree;
+    FlatPanel1: TFlatPanel;
+    procedure btExcelOpenClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure PreviewTreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
   private
-    { Private declarations }
+	procedure DrawPreview(Sheet: OleVariant; Rows, Columns: integer);
   public
-    { Public declarations }
+
   end;
 
 var
-  Form1: TForm1;
+  Form1: 				TForm1;
+  fcon_local, fcon_vtk:	OleVariant;
+  PreviewArray:			array of array of AnsiString;
 
 implementation
 
 {$R *.dfm}
 
-procedure SetMaxColumnWidth(grid: TStringGrid);
+uses
+    uxADO_cutted, uxSQL;
+
+procedure TForm1.DrawPreview(Sheet: OleVariant; Rows, Columns: integer);
+procedure SetTreeColumns(Sheet: OleVariant; Columns: integer);
 var
-    i, j, temp, max:    integer;
+	Column:	TVirtualTreeColumn;
 begin
-	for i := 0 to Grid.ColCount - 1 do
-    begin
-        max := 0;
-        for j := 0 to Grid.RowCount - 1 do
+	try
+        for var i := 0 to Columns do
         begin
-            temp := Grid.Canvas.TextWidth(Grid.Cells[i, j]);
-            if temp > max then
-                max := temp;
+            Column := PreviewTree.Header.Columns.Add;
+            Column.Tag := i;
+            Column.Alignment := taLeftJustify;
+            Column.Text := (i+1).ToString;
         end;
-    	grid.colWidths[i] := max + grid.gridLineWidth + 30;
+    finally
+        PreviewTree.Invalidate;
     end;
 end;
 
-procedure Excel_Open(file_name: string; grid: TStringGrid);
-const xlCellTypeLastCell = $0000000B;
-var
-	Excel, Sheet:		   			OleVariant;
-    i, j, grid_cursor_i, temp, max:	integer;
 begin
-    Excel := CreateOleObject('Excel.Application');
-    grid_cursor_i := 0;
-    Grid.RowCount := 0;
-    Grid.ColCount := 0;
+    try
+        PreviewTree.BeginUpdate;
+        SetTreeColumns(Sheet, Columns);
+        SetLength(PreviewArray, Rows);
 
-    Excel.Workbooks.Open(file_name);
-
-    for var sheet_number: integer := 1 to Excel.Workbooks[ExtractFileName(file_name)].Sheets.Count do
-    begin
-        Sheet := Excel.Workbooks[ExtractFileName(file_name)].WorkSheets[sheet_number];
-        Sheet.Activate;
-        Sheet.Cells.SpecialCells(xlCellTypeLastCell, EmptyParam).Activate;
-
-        Grid.RowCount := Grid.RowCount + Sheet.UsedRange.Rows.Count;
-        if Excel.ActiveCell.Column >= Grid.ColCount then
-			Grid.ColCount := Sheet.UsedRange.Columns.Count;
-
-        for i := 0 to Grid.ColCount - 1 do
+        for var j := 0 to 100 do
         begin
-        	max := 0;
-        	for j := 0 to Grid.RowCount - 1 do
-        	begin
-        		Grid.Cells[j, i] := Sheet.Cells[j+1, i+1];
-//              temp := Grid.Canvas.TextWidth(Grid.Cells[j, grid_cursor_i]);
-//            	if temp > max then
-//            		max := temp;
+        	SetLength(PreviewArray[j], Columns);
+            for var i := 0 to Columns do
+            begin
+                PreviewArray[j, i] := Sheet.Cells[j+1, i+1];
             end;
-            //grid.ColWidths[i - 1] := max + grid.gridLineWidth + 30;
-            Inc(grid_cursor_i);
-        end;
+            PreviewTree.AddChild(nil, pointer(j));
+        end
+    finally
+        PreviewTree.Header.AutoFitColumns;
+        PreviewTree.EndUpdate;
+        PreviewTree.Invalidate;
     end;
-
-    //SetMaxColumnWidth(grid);
-
-    Excel.Quit;
-    Excel := Unassigned;
-    Sheet := Unassigned;
 end;
 
-procedure TForm1.ChooseButtonClick(Sender: TObject);
+procedure TForm1.btExcelOpenClick(Sender: TObject);
+var
+	Excel, Sheet:					OleVariant;
+    Rows, Columns:					integer;
+    total_time:                     TDateTime;
 begin
-    if OpenDialog1.Execute then Excel_Open(OpenDialog1.FileName, StringGrid1);
+	try
+        total_time := Now();
+        if OpenDialog1.Execute then
+        begin
+            Excel := CreateOleObject('Excel.Application');
+            Excel.Workbooks.Open(OpenDialog1.FileName, 0, true);
+            Sheet := Excel.ActiveWorkbook.ActiveSheet;
+
+            Rows := Sheet.UsedRange.Rows.Count;
+            Columns := Sheet.UsedRange.Columns.Count;
+
+            DrawPreview(Sheet, Rows, Columns);
+        end;
+        ShowMessage(FormatDateTime('hh:mm:ss', Now() - total_time));
+    finally
+    	Excel.Quit;
+    	Excel := Unassigned;
+    end;
 end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+    ConnectSQL(fcon_local, 'local');
+end;
+
+procedure TForm1.PreviewTreeGetText(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
+  var CellText: string);
+begin
+    CellText := PreviewArray[Node.RowIndex, Column];
+end;
+
 end.
