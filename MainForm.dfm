@@ -53,10 +53,10 @@ object Form1: TForm1
       Colors.SelectionRectangleBorderColor = 15385233
       Colors.SelectionTextColor = clBlack
       Colors.TreeLineColor = 9471874
-      Colors.UnfocusedColor = 9693824
+      Colors.UnfocusedColor = 9695420
       Colors.UnfocusedSelectionColor = 15385233
       Colors.UnfocusedSelectionBorderColor = 15385233
-      Colors.HeaderColor = 9693824
+      Colors.HeaderColor = 9695420
       DefaultNodeHeight = 25
       Header.AutoSizeIndex = 0
       Header.DefaultHeight = 25
@@ -71,8 +71,6 @@ object Form1: TForm1
       TabOrder = 1
       TreeOptions.MiscOptions = [toAcceptOLEDrop, toCheckSupport, toEditable, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning, toVariableNodeHeight, toEditOnClick, toEditOnDblClick]
       TreeOptions.PaintOptions = [toHideFocusRect, toHideSelection, toShowDropmark, toShowHorzGridLines, toAlwaysHideSelection]
-      ExplicitLeft = -5
-      ExplicitTop = -5
       Columns = <
         item
           Alignment = taCenter
@@ -98,8 +96,6 @@ object Form1: TForm1
       Align = alClient
       TabOrder = 2
       UseDockManager = True
-      ExplicitLeft = 129
-      ExplicitTop = -55
       object PreviewTree: TVirtualStringTree
         Left = 1
         Top = 1
@@ -122,10 +118,10 @@ object Form1: TForm1
         Colors.SelectionRectangleBorderColor = 15385233
         Colors.SelectionTextColor = clBlack
         Colors.TreeLineColor = 9471874
-        Colors.UnfocusedColor = 9693628
+        Colors.UnfocusedColor = 9695224
         Colors.UnfocusedSelectionColor = 15385233
         Colors.UnfocusedSelectionBorderColor = 15385233
-        Colors.HeaderColor = 9693628
+        Colors.HeaderColor = 9695224
         DefaultNodeHeight = 25
         Header.AutoSizeIndex = -1
         Header.DefaultHeight = 25
@@ -142,7 +138,6 @@ object Form1: TForm1
         TreeOptions.MiscOptions = [toAcceptOLEDrop, toCheckSupport, toEditable, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning, toVariableNodeHeight, toEditOnClick, toEditOnDblClick]
         TreeOptions.PaintOptions = [toHideFocusRect, toHideSelection, toShowDropmark, toShowHorzGridLines, toAlwaysHideSelection]
         OnGetText = PreviewTreeGetText
-        ExplicitHeight = 556
         Columns = <>
       end
     end
@@ -157,6 +152,7 @@ object Form1: TForm1
     Top = 40
     object miAddSupplier: TMenuItem
       Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1087#1086#1089#1090#1072#1074#1097#1080#1082#1072
+      OnClick = miAddSupplierClick
     end
   end
 end

@@ -21,34 +21,33 @@ type
     procedure FormCreate(Sender: TObject);
     procedure PreviewTreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
+    procedure miAddSupplierClick(Sender: TObject);
   private
-	procedure DrawPreview(Sheet: OleVariant; Rows, Columns: integer);
+	procedure DrawPreview(Rows, Columns: integer);
   public
 
   end;
 
 var
-  Form1: 				TForm1;
-  fcon_local, fcon_vtk:	OleVariant;
-  PreviewArray:			array of array of AnsiString;
+  Form1:				TForm1;
+  fcon, PreviewArray:	OleVariant;
 
 implementation
 
 {$R *.dfm}
 
 uses
-    uxADO_cutted, uxSQL;
+    uxADO_cutted, uxSQL, ufAddSupplier;
 
-procedure TForm1.DrawPreview(Sheet: OleVariant; Rows, Columns: integer);
-procedure SetTreeColumns(Sheet: OleVariant; Columns: integer);
+procedure TForm1.DrawPreview(Rows, Columns: integer);
+procedure SetTreeColumns;
 var
 	Column:	TVirtualTreeColumn;
 begin
 	try
-        for var i := 0 to Columns do
+        for var i: integer := 0 to Columns-1 do
         begin
             Column := PreviewTree.Header.Columns.Add;
-            Column.Tag := i;
             Column.Alignment := taLeftJustify;
             Column.Text := (i+1).ToString;
         end;
@@ -57,23 +56,23 @@ begin
     end;
 end;
 
+var
+	N: PVirtualNode;
 begin
     try
         PreviewTree.BeginUpdate;
-        SetTreeColumns(Sheet, Columns);
-        SetLength(PreviewArray, Rows);
+        SetTreeColumns;
 
-        for var j := 0 to 100 do
+        PreviewTree.RootNodeCount := Rows;
+
+        N := PreviewTree.GetFirst;
+        while Assigned(N) do
         begin
-        	SetLength(PreviewArray[j], Columns);
-            for var i := 0 to Columns do
-            begin
-                PreviewArray[j, i] := Sheet.Cells[j+1, i+1];
-            end;
-            PreviewTree.AddChild(nil, pointer(j));
+            N.SetData(pointer(N.Index));
+            N := N.NextSibling;
         end
     finally
-        PreviewTree.Header.AutoFitColumns;
+        PreviewTree.Header.AutoFitColumns(false);
         PreviewTree.EndUpdate;
         PreviewTree.Invalidate;
     end;
@@ -86,35 +85,56 @@ var
     total_time:                     TDateTime;
 begin
 	try
-        total_time := Now();
         if OpenDialog1.Execute then
         begin
+        	total_time := Now();
+
             Excel := CreateOleObject('Excel.Application');
             Excel.Workbooks.Open(OpenDialog1.FileName, 0, true);
             Sheet := Excel.ActiveWorkbook.ActiveSheet;
 
-            Rows := Sheet.UsedRange.Rows.Count;
+            Rows := 50;
+            //Rows := Sheet.UsedRange.Rows.Count;
             Columns := Sheet.UsedRange.Columns.Count;
 
-            DrawPreview(Sheet, Rows, Columns);
+            PreviewArray := Sheet.UsedRange.Value;
+
+            DrawPreview(Rows, Columns);
         end;
-        ShowMessage(FormatDateTime('hh:mm:ss', Now() - total_time));
     finally
+    	ShowMessage(FormatDateTime('hh:mm:ss', Now() - total_time));
     	Excel.Quit;
     	Excel := Unassigned;
     end;
 end;
 
+
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-    ConnectSQL(fcon_local, 'local');
+    ConnectSQL(fcon);
+end;
+
+procedure TForm1.miAddSupplierClick(Sender: TObject);
+begin
+	try
+        with TForm2.Create(nil) do
+        begin
+            if ShowModal = mrOk then
+            begin
+                fcon.Execute('insert into VTK_EXCEL.dbo.Suppliers values('
+                + SuppliersTree.Text[SuppliersTree.FocusedNode, 0] + ')');
+            end;
+        end;
+    finally
+
+    end;
 end;
 
 procedure TForm1.PreviewTreeGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: string);
 begin
-    CellText := PreviewArray[Node.RowIndex, Column];
+    CellText := PreviewArray[Node.RowIndex+1, Column+1];
 end;
 
 end.
