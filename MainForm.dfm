@@ -1,9 +1,10 @@
 object Form1: TForm1
   Left = 0
   Top = 0
+  ActiveControl = LinksTree
   Caption = 'Form1'
-  ClientHeight = 626
-  ClientWidth = 1022
+  ClientHeight = 689
+  ClientWidth = 1114
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,15 +18,17 @@ object Form1: TForm1
   object MainPanel: TPanel
     Left = 0
     Top = 0
-    Width = 1022
-    Height = 626
+    Width = 1114
+    Height = 689
     Align = alClient
     TabOrder = 0
+    ExplicitWidth = 1022
+    ExplicitHeight = 626
     object SuppliersTree: TVirtualStringTree
       Left = 1
       Top = 1
-      Width = 376
-      Height = 624
+      Width = 360
+      Height = 687
       AccessibleName = #1054#1089#1090#1072#1090#1086#1082
       Align = alLeft
       BorderStyle = bsNone
@@ -64,6 +67,7 @@ object Form1: TForm1
       OnBeforeCellPaint = SuppliersTreeBeforeCellPaint
       OnFocusChanged = SuppliersTreeFocusChanged
       OnGetText = SuppliersTreeGetText
+      ExplicitHeight = 688
       Columns = <
         item
           Alignment = taCenter
@@ -94,7 +98,7 @@ object Form1: TForm1
         item
           Alignment = taCenter
           Position = 3
-          Width = 156
+          Width = 140
           Aggregate = False
           FilterMode = 0
           WideText = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077
@@ -102,10 +106,10 @@ object Form1: TForm1
     end
     object FlatPanel1: TFlatPanel
       Tag = 1
-      Left = 377
+      Left = 361
       Top = 1
-      Width = 644
-      Height = 624
+      Width = 752
+      Height = 687
       ParentColor = True
       ColorHighLight = 8623776
       ColorShadow = 8623776
@@ -113,15 +117,16 @@ object Form1: TForm1
       Align = alClient
       TabOrder = 1
       UseDockManager = True
-      ExplicitLeft = 201
-      ExplicitWidth = 820
+      ExplicitLeft = 377
+      ExplicitWidth = 644
+      ExplicitHeight = 624
       object PreviewTree: TVirtualStringTree
         Left = 1
         Top = 1
-        Width = 642
-        Height = 439
+        Width = 750
+        Height = 420
         AccessibleName = #1054#1089#1090#1072#1090#1086#1082
-        Align = alClient
+        Align = alTop
         BorderStyle = bsNone
         Colors.BorderColor = 15987699
         Colors.DisabledColor = clGray
@@ -158,78 +163,177 @@ object Form1: TForm1
         TreeOptions.PaintOptions = [toHideFocusRect, toHideSelection, toShowDropmark, toShowHorzGridLines, toAlwaysHideSelection]
         OnBeforeCellPaint = SuppliersTreeBeforeCellPaint
         OnGetText = PreviewTreeGetText
-        OnPaintText = PreviewTreePaintText
-        ExplicitHeight = 336
         Columns = <>
       end
-      object VirtualStringTree1: TVirtualStringTree
+      object FlatPanel2: TFlatPanel
+        Tag = 1
         Left = 1
-        Top = 440
-        Width = 642
-        Height = 183
-        AccessibleName = #1054#1089#1090#1072#1090#1086#1082
-        Align = alBottom
-        Colors.BorderColor = 15987699
-        Colors.DisabledColor = clGray
-        Colors.DropMarkColor = 15385233
-        Colors.DropTargetColor = 15385233
-        Colors.DropTargetBorderColor = 15987699
-        Colors.FocusedSelectionColor = 15385233
-        Colors.FocusedSelectionBorderColor = clWhite
-        Colors.GridLineColor = 15987699
-        Colors.HeaderHotColor = clBlack
-        Colors.HotColor = clBlack
-        Colors.SelectionRectangleBlendColor = 15385233
-        Colors.SelectionRectangleBorderColor = 15385233
-        Colors.SelectionTextColor = clBlack
-        Colors.TreeLineColor = 9471874
-        Colors.UnfocusedColor = 9693628
-        Colors.UnfocusedSelectionColor = 15385233
-        Colors.UnfocusedSelectionBorderColor = 15385233
-        Colors.HeaderColor = 9693628
-        DefaultNodeHeight = 25
-        Header.AutoSizeIndex = 0
-        Header.DefaultHeight = 25
-        Header.Font.Charset = DEFAULT_CHARSET
-        Header.Font.Color = clWindowText
-        Header.Font.Height = -11
-        Header.Font.Name = 'Tahoma'
-        Header.Font.Style = []
-        Header.Height = 25
+        Top = 421
+        Width = 750
+        Height = 265
+        ParentColor = True
+        ColorHighLight = 8623776
+        ColorShadow = 8623776
+        BorderColor = 8623776
+        Align = alClient
         TabOrder = 1
-        Columns = <
-          item
-            Alignment = taCenter
-            Position = 0
-            Width = 200
-            Aggregate = False
-            FilterMode = 0
-            WideText = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077
+        UseDockManager = True
+        ExplicitLeft = 49
+        ExplicitTop = 287
+        ExplicitHeight = 405
+        object LinksTree: TVirtualStringTree
+          Left = 1
+          Top = 193
+          Width = 748
+          Height = 71
+          AccessibleName = #1054#1089#1090#1072#1090#1086#1082
+          Align = alClient
+          Colors.BorderColor = 15987699
+          Colors.DisabledColor = clGray
+          Colors.DropMarkColor = 15385233
+          Colors.DropTargetColor = 15385233
+          Colors.DropTargetBorderColor = 15987699
+          Colors.FocusedSelectionColor = 15385233
+          Colors.FocusedSelectionBorderColor = clWhite
+          Colors.GridLineColor = 15987699
+          Colors.HeaderHotColor = clBlack
+          Colors.HotColor = clBlack
+          Colors.SelectionRectangleBlendColor = 15385233
+          Colors.SelectionRectangleBorderColor = 15385233
+          Colors.SelectionTextColor = clBlack
+          Colors.TreeLineColor = 9471874
+          Colors.UnfocusedColor = 9693432
+          Colors.UnfocusedSelectionColor = 15385233
+          Colors.UnfocusedSelectionBorderColor = 15385233
+          Colors.HeaderColor = 9693432
+          DefaultNodeHeight = 25
+          Header.AutoSizeIndex = 0
+          Header.DefaultHeight = 25
+          Header.Font.Charset = DEFAULT_CHARSET
+          Header.Font.Color = clWindowText
+          Header.Font.Height = -13
+          Header.Font.Name = 'Tahoma'
+          Header.Font.Style = []
+          Header.Height = 25
+          TabOrder = 0
+          OnGetText = LinksTreeGetText
+          ExplicitTop = 216
+          ExplicitHeight = 188
+          Columns = <
+            item
+              Alignment = taCenter
+              Position = 0
+              Width = 200
+              Aggregate = False
+              FilterMode = 0
+              WideText = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077
+            end
+            item
+              Alignment = taCenter
+              Position = 1
+              Width = 120
+              Aggregate = False
+              FilterMode = 0
+              WideText = #1040#1088#1090#1080#1082#1091#1083
+            end
+            item
+              Alignment = taCenter
+              Position = 2
+              Width = 100
+              Aggregate = False
+              FilterMode = 0
+              WideText = #1062#1077#1085#1072
+            end
+            item
+              Alignment = taCenter
+              Position = 3
+              Width = 100
+              Aggregate = False
+              FilterMode = 0
+              WideText = #1054#1089#1090#1072#1090#1086#1082
+            end>
+        end
+        object FlatPanel3: TFlatPanel
+          Tag = 1
+          Left = 1
+          Top = 1
+          Width = 748
+          Height = 192
+          ParentColor = True
+          ColorHighLight = 8623776
+          ColorShadow = 8623776
+          BorderColor = 8623776
+          Align = alTop
+          TabOrder = 1
+          UseDockManager = True
+          ExplicitLeft = 5
+          ExplicitTop = 6
+          object Label3: TLabel
+            Left = 415
+            Top = 41
+            Width = 150
+            Height = 16
+            Caption = #1057#1090#1086#1083#1073#1077#1094' "'#1062#1077#1085#1072' '#1074#1093#1086#1076' '#1042#1058#1050'"'
           end
-          item
-            Alignment = taCenter
-            Position = 1
-            Width = 120
-            Aggregate = False
-            FilterMode = 0
-            WideText = #1040#1088#1090#1080#1082#1091#1083
+          object Label1: TLabel
+            Left = 455
+            Top = 73
+            Width = 110
+            Height = 16
+            Caption = #1057#1090#1086#1083#1073#1077#1094' "'#1054#1089#1090#1072#1090#1082#1080'"'
           end
-          item
-            Alignment = taCenter
-            Position = 2
-            Width = 100
-            Aggregate = False
-            FilterMode = 0
-            WideText = #1062#1077#1085#1072
+          object Label2: TLabel
+            Left = 68
+            Top = 41
+            Width = 169
+            Height = 16
+            Caption = #1057#1090#1086#1083#1073#1077#1094' "'#1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077' '#1040#1055'"'
           end
-          item
-            Alignment = taCenter
-            Position = 3
-            Width = 100
-            Aggregate = False
-            FilterMode = 0
-            WideText = #1054#1089#1090#1072#1090#1086#1082
-          end>
+          object Label4: TLabel
+            Left = 107
+            Top = 73
+            Width = 130
+            Height = 16
+            Caption = #1057#1090#1086#1083#1073#1077#1094' "'#1040#1088#1090#1080#1082#1091#1083' '#1040#1055'"'
+          end
+          object btSaveLinks: TButton
+            Left = 569
+            Top = 145
+            Width = 169
+            Height = 33
+            Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1087#1088#1080#1074#1103#1079#1082#1091
+            TabOrder = 0
+            OnClick = btSaveLinksClick
+          end
+          object cbPrice: TComboBox
+            Left = 571
+            Top = 37
+            Width = 122
+            Height = 24
+            TabOrder = 1
+          end
+          object cbQuantity: TComboBox
+            Left = 571
+            Top = 67
+            Width = 122
+            Height = 24
+            TabOrder = 2
+          end
+          object cbArticle: TComboBox
+            Left = 243
+            Top = 69
+            Width = 122
+            Height = 24
+            TabOrder = 3
+          end
+          object cbName: TComboBox
+            Left = 243
+            Top = 37
+            Width = 122
+            Height = 24
+            TabOrder = 4
+          end
+        end
       end
     end
   end
@@ -251,6 +355,7 @@ object Form1: TForm1
     end
     object miDeleteSupplier: TMenuItem
       Caption = #1059#1076#1072#1083#1080#1090#1100' '#1087#1086#1089#1090#1072#1074#1097#1080#1082#1072
+      OnClick = miDeleteSupplierClick
     end
   end
   object scLoadSuppliers: TStringContainer
@@ -297,7 +402,7 @@ object Form1: TForm1
       '('
       
         'select row, col, val from Excel_templates where val is not null ' +
-        'and linkid = %d'
+        'and row > 0 and linkid = %d'
       ') a'
       'pivot (max(val) for col in ('#39' + @c + '#39')) p'
       'order by 1'

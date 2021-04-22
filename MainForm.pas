@@ -20,7 +20,18 @@ type
     miChangeTemplate: TMenuItem;
     miDeleteSupplier: TMenuItem;
     scLoadExcel: TStringContainer;
-    VirtualStringTree1: TVirtualStringTree;
+    LinksTree: TVirtualStringTree;
+    FlatPanel2: TFlatPanel;
+    cbPrice: TComboBox;
+    Label3: TLabel;
+    btSaveLinks: TButton;
+    FlatPanel3: TFlatPanel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label4: TLabel;
+    cbQuantity: TComboBox;
+    cbArticle: TComboBox;
+    cbName: TComboBox;
     procedure FormCreate(Sender: TObject);
     procedure PreviewTreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
@@ -34,25 +45,30 @@ type
       CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
     procedure SuppliersTreeFocusChanged(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex);
-    procedure PreviewTreePaintText(Sender: TBaseVirtualTree;
-      const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
-      TextType: TVSTTextType);
+    procedure btSaveLinksClick(Sender: TObject);
+    procedure LinksTreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
+      Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
+    procedure miDeleteSupplierClick(Sender: TObject);
   private
 	procedure DrawPreview;
+    procedure LoadPreview;
+
     type
         tSupplier = record
             id:		integer;
             pid:    integer;
             tin:    AnsiString;
             name:   AnsiString;
-        end;
+    	end;
+
   public
-    Suppliers:  array of tSupplier;
+    Suppliers:  	   	array of tSupplier;
   end;
 
 var
   Form1:				TForm1;
   fcon, PreviewArray:	OleVariant;
+  Excel_links:          array [0..3] of integer;
 
 implementation
 
@@ -68,12 +84,22 @@ var
 begin
 	try
         PreviewTree.Header.Columns.Clear;
+        cbName.Items.Clear;
+        cbArticle.Items.Clear;
+        cbPrice.Items.Clear;
+        cbQuantity.Items.Clear;
+
         for var i: integer := 0 to VarArrayHighBound(PreviewArray, 2)-1 do
         begin
             Column := PreviewTree.Header.Columns.Add;
             Column.Alignment := taLeftJustify;
             Column.CaptionAlignment := taCenter;
-            Column.Text := Char(i+65);
+            Column.Text := i.ToString;
+
+            cbName.Items.Add(i.ToString);
+            cbArticle.Items.Add(i.ToString);
+            cbPrice.Items.Add(i.ToString);
+            cbQuantity.Items.Add(i.ToString);
         end;
     finally
         PreviewTree.Invalidate;
@@ -81,24 +107,37 @@ begin
 end;
 
 var
-	N: PVirtualNode;
+	N, M: PVirtualNode;
 begin
     try
         PreviewTree.BeginUpdate;
+        LinksTree.BeginUpdate;
+
         PreviewTree.Clear;
+        LinksTree.Clear;
+
         SetTreeColumns;
 
         PreviewTree.RootNodeCount := VarArrayHighBound(PreviewArray, 1);
+        LinksTree.RootNodeCount := PreviewTree.RootNodeCount;
 
         N := PreviewTree.GetFirst;
-        while Assigned(N) do
+        M := LinksTree.GetFirst;
+        while Assigned(N) and Assigned(M) do
         begin
             N.SetData(pointer(N.Index));
+            M.SetData(pointer(M.Index));
+
             N := N.NextSibling;
+            M := M.NextSibling;
         end
     finally
         PreviewTree.Header.AutoFitColumns(false);
+        LinksTree.Header.AutoFitColumns(false);
         PreviewTree.EndUpdate;
+        LinksTree.EndUpdate;
+
+        LinksTree.Invalidate;
         PreviewTree.Invalidate;
     end;
 end;
@@ -111,8 +150,8 @@ end;
 
 procedure TForm1.LoadSuppliers;
 var
-    R:	OleVariant;
-    K:  integer;
+    R, R1:	OleVariant;
+    K:  	integer;
 begin
     try
         R := fcon.Execute(scLoadSuppliers.Items.Text);
@@ -148,7 +187,8 @@ begin
                 fcon.Execute('insert into Suppliers values('
                 + SuppliersTree.Text[SuppliersTree.FocusedNode, 0] + ')');
 
-                LoadSuppliers;
+
+                LoadSuppliers; //Подгружать не всех, а только выбранного
             end;
         end;
     finally
@@ -185,19 +225,20 @@ begin
             for var i: integer := 1 to Rows do
             	for var j: integer := 1 to Columns do
                 begin
-                	if PreviewArray[i, j] = '' then continue;
+                	if not VarIsClear(PreviewArray[i, j]) then
+                    begin
+                        if VarType(PreviewArray[i, j]) = varDouble then
+                            S := QuotedStr(extended(PreviewArray[i, j]).ToString)
+                        else
+                            S := QuotedStr(PreviewArray[i, j]);
 
-                    if VarType(PreviewArray[i, j]) = varDouble then
-                        S := QuotedStr(extended(PreviewArray[i, j]).ToString)
-                    else
-                        S := QuotedStr(PreviewArray[i, j]);
-
-          			List.Add(Format('(' + id.ToString + ',%d, %d, %s),', [i, j, S]));
+                        List.Add(Format('(' + id.ToString + ',%d, %d, %s),', [i, j, S]));
+                    end;
                 end;
-            List.Add('(' + id.ToString + '0, 1, null)');
-            List.Add('(' + id.ToString + '0, 2, null)');
-            List.Add('(' + id.ToString + '0, 3, null)');
-            List.Add('(' + id.ToString + '0, 4, null)');
+            List.Add('(' + id.ToString + ',0, 1, null),');
+            List.Add('(' + id.ToString + ',0, 2, null),');
+            List.Add('(' + id.ToString + ',0, 3, null),');
+            List.Add('(' + id.ToString + ',0, 4, null)');
 
             //List.SaveToFile('test.sql');
             fcon.Execute(List.Text);
@@ -208,6 +249,22 @@ begin
     		Excel := Unassigned;
         end;
     finally
+    end;
+end;
+
+procedure TForm1.miDeleteSupplierClick(Sender: TObject);
+var
+    id:	integer;
+begin
+    try
+        id := Suppliers[SuppliersTree.FocusedNode.Index].id;
+    finally
+        fcon.Execute('delete from Suppliers where id = ' + id.ToString);
+        fcon.Execute('delete from Excel_templates where linkid = ' + id.ToString);
+
+        ShowMessage('Поставщик успешно удален!');
+
+        LoadSuppliers;
     end;
 end;
 
@@ -226,17 +283,6 @@ begin
     	CellText := PreviewArray[Node.RowIndex+1, Column+1];
 end;
 
-procedure TForm1.PreviewTreePaintText(Sender: TBaseVirtualTree;
-  const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
-  TextType: TVSTTextType);
-begin
-    if VarType(PreviewArray[Node.Index+1, Column+1]) = varDouble then
-    begin
-        TargetCanvas.Font.Color := clRed;
-        //TargetCanvas.TextRect
-    end;
-end;
-
 procedure TForm1.SuppliersTreeBeforeCellPaint(Sender: TBaseVirtualTree;
   TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
   CellPaintMode: TVTCellPaintMode; CellRect: TRect; var ContentRect: TRect);
@@ -249,16 +295,71 @@ var
     TargetCanvas.FillRect(R);
 end;
 
-procedure TForm1.SuppliersTreeFocusChanged(Sender: TBaseVirtualTree;
-  Node: PVirtualNode; Column: TColumnIndex);
-procedure LoadPreview;
+procedure TForm1.btSaveLinksClick(Sender: TObject);
 var
-	R:				OleVariant;
-    rows, cols:     integer;
+	id:	integer;
 begin
-    R := fcon.Execute(Format(scLoadExcel.Items.Text, [Suppliers[Node.Index].id]));
+    try
+        if cbName.Items.Count = 0 then
+        	ShowMessage('Нечего привязывать!')
+        else if (cbName.Text <> '') and (cbArticle.Text <> '')
+        and (cbPrice.Text <> '') and (cbQuantity.Text<> '') then
+        begin
+            id := Suppliers[SuppliersTree.FocusedNode.Index].id;
+
+            fcon.Execute('delete from Excel_templates where row = 0 and linkid = ' + id.ToString);
+
+            fcon.Execute('insert into Excel_templates values'
+            + '(' + id.ToString + ', 0, 1, ' + cbName.Text + '),'
+            + '(' + id.ToString + ', 0, 2, ' + cbArticle.Text + '),'
+            + '(' + id.ToString + ', 0, 3, ' + cbPrice.Text + '),'
+            + '(' + id.ToString + ', 0, 4, ' + cbQuantity.Text + ')');
+
+            ShowMessage('Столбцы успешно привязаны.');
+        end
+        else
+        	ShowMessage('Выберите все столбцы для привязки!');
+    finally
+
+    end;
+end;
+
+procedure TForm1.LinksTreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
+  Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
+var
+	V: Variant;
+begin
+    V := PreviewArray[Node.RowIndex+1, Excel_links[Column]+1];
+
+    if VarIsNull(V) then
+    	CellText := ''
+    else
+    	CellText := PreviewArray[Node.RowIndex+1, Excel_links[Column]+1];
+end;
+
+procedure TForm1.LoadPreview;
+var
+	R, R1:				OleVariant;
+    rows, cols, index:	integer;
+begin
+    index := SuppliersTree.FocusedNode.Index;
+
+    R := fcon.Execute(Format(scLoadExcel.Items.Text, [Suppliers[index].id]));
+    R1 := fcon.Execute('select * from Excel_templates where row = 0 and linkid = ' + Suppliers[index].id.ToString);
+
     rows := R.RecordCount;
     cols := R.Fields.Count;
+
+    for var i: integer := 0 to R1.RecordCount-1 do
+    begin
+        Excel_links[i] := AsInt(R1, 'val');
+        R1.MoveNext;
+    end;
+
+    cbName.Text := Excel_links[0].ToString;
+    cbArticle.Text := Excel_links[1].ToString;
+    cbPrice.Text := Excel_links[2].ToString;
+    cbQuantity.Text := Excel_links[3].ToString;
 
     PreviewArray := VarArrayCreate([1, rows, 1, cols], varVariant);
 
@@ -272,6 +373,8 @@ begin
     end;
 end;
 
+procedure TForm1.SuppliersTreeFocusChanged(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Column: TColumnIndex);
 begin
     LoadPreview;
     DrawPreview;
