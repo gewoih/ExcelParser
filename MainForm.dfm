@@ -45,10 +45,10 @@ object Form1: TForm1
       Colors.SelectionRectangleBorderColor = 15385233
       Colors.SelectionTextColor = clBlack
       Colors.TreeLineColor = 9471874
-      Colors.UnfocusedColor = 9693824
+      Colors.UnfocusedColor = 9695420
       Colors.UnfocusedSelectionColor = 15385233
       Colors.UnfocusedSelectionBorderColor = 15385233
-      Colors.HeaderColor = 9693824
+      Colors.HeaderColor = 9695420
       DefaultNodeHeight = 25
       Header.AutoSizeIndex = 3
       Header.DefaultHeight = 25
@@ -137,10 +137,10 @@ object Form1: TForm1
         Colors.SelectionRectangleBorderColor = 15385233
         Colors.SelectionTextColor = clBlack
         Colors.TreeLineColor = 9471874
-        Colors.UnfocusedColor = 9693628
+        Colors.UnfocusedColor = 9695224
         Colors.UnfocusedSelectionColor = 15385233
         Colors.UnfocusedSelectionBorderColor = 15385233
-        Colors.HeaderColor = 9693628
+        Colors.HeaderColor = 9695224
         DefaultNodeHeight = 25
         Header.AutoSizeIndex = -1
         Header.DefaultHeight = 25
@@ -195,10 +195,10 @@ object Form1: TForm1
           Colors.SelectionRectangleBorderColor = 15385233
           Colors.SelectionTextColor = clBlack
           Colors.TreeLineColor = 9471874
-          Colors.UnfocusedColor = 9693432
+          Colors.UnfocusedColor = 9695028
           Colors.UnfocusedSelectionColor = 15385233
           Colors.UnfocusedSelectionBorderColor = 15385233
-          Colors.HeaderColor = 9693432
+          Colors.HeaderColor = 9695028
           DefaultNodeHeight = 25
           Header.AutoSizeIndex = 0
           Header.DefaultHeight = 25
@@ -210,6 +210,8 @@ object Form1: TForm1
           Header.Height = 26
           TabOrder = 0
           OnGetText = PreviewTreeGetText
+          ExplicitLeft = 5
+          ExplicitTop = 187
           Columns = <
             item
               Alignment = taCenter
@@ -242,6 +244,14 @@ object Form1: TForm1
               Aggregate = False
               FilterMode = 0
               WideText = #1054#1089#1090#1072#1090#1086#1082
+            end
+            item
+              Alignment = taCenter
+              Position = 4
+              Width = 150
+              Aggregate = False
+              FilterMode = 0
+              WideText = #1061#1072#1088#1072#1082#1090#1077#1088#1080#1089#1090#1080#1082#1072
             end>
         end
         object FlatPanel3: TFlatPanel
@@ -258,36 +268,43 @@ object Form1: TForm1
           TabOrder = 1
           UseDockManager = True
           object Label3: TLabel
-            Left = 473
+            Left = 452
             Top = 41
-            Width = 92
+            Width = 113
             Height = 16
-            Caption = #1062#1077#1085#1072' '#1074#1093#1086#1076' '#1042#1058#1050':'
+            Caption = #1062#1077#1085#1072' '#1074#1093#1086#1076' '#1042#1058#1050' (3):'
           end
           object Label1: TLabel
-            Left = 513
-            Top = 73
-            Width = 52
+            Left = 492
+            Top = 71
+            Width = 73
             Height = 16
-            Caption = #1054#1089#1090#1072#1090#1082#1080':'
+            Caption = #1054#1089#1090#1072#1090#1082#1080' (4):'
           end
           object Label2: TLabel
-            Left = 126
+            Left = 105
             Top = 41
-            Width = 111
+            Width = 132
             Height = 16
-            Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077' '#1040#1055':'
+            Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077' '#1040#1055' (1):'
           end
           object Label4: TLabel
-            Left = 165
+            Left = 144
             Top = 71
-            Width = 72
+            Width = 93
             Height = 16
-            Caption = #1040#1088#1090#1080#1082#1091#1083' '#1040#1055':'
+            Caption = #1040#1088#1090#1080#1082#1091#1083' '#1040#1055' (2):'
+          end
+          object Label5: TLabel
+            Left = 411
+            Top = 99
+            Width = 120
+            Height = 16
+            Caption = #1061#1072#1088#1072#1082#1090#1077#1088#1080#1089#1090#1080#1082#1072' (5):'
           end
           object btSaveLinks: TButton
             Left = 569
-            Top = 145
+            Top = 153
             Width = 169
             Height = 33
             Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1087#1088#1080#1074#1103#1079#1082#1091
@@ -321,6 +338,13 @@ object Form1: TForm1
             Width = 121
             Height = 24
             TabOrder = 4
+          end
+          object tProperty: TEdit
+            Left = 411
+            Top = 121
+            Width = 121
+            Height = 24
+            TabOrder = 5
           end
         end
         object btUploadPrice: TButton
@@ -410,5 +434,15 @@ object Form1: TForm1
       'exec(@s)')
     Left = 120
     Top = 104
+  end
+  object scAddSupplier: TStringContainer
+    Items.Strings = (
+      'insert into Suppliers values(%s)'
+      'declare @id int = SCOPE_IDENTITY()'
+      
+        'insert into Excel_templates values (@id, 0, 1, '#39'-1'#39'), (@id, 0, 2' +
+        ', '#39'-1'#39'), (@id, 0, 3, '#39'-1'#39'), (@id, 0, 4, '#39'-1'#39'), (@id, 0, 5, '#39'-1'#39')')
+    Left = 40
+    Top = 168
   end
 end

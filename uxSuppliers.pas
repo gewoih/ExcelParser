@@ -28,8 +28,7 @@ begin
         begin
             if ShowModal = mrOk then
             begin
-                fcon.Execute('insert into Suppliers values('
-                + SuppliersTree.Text[SuppliersTree.FocusedNode, 0] + ')');
+                fcon.Execute(Format(Form1.scAddSupplier.Items.Text, [SuppliersTree.Text[SuppliersTree.FocusedNode, 0]]));
 
                 LoadSuppliers; //Подгружать не всех, а только выбранного
             end;

@@ -33,6 +33,9 @@ type
     tPrice: TEdit;
     tQuantity: TEdit;
     btUploadPrice: TButton;
+    Label5: TLabel;
+    tProperty: TEdit;
+    scAddSupplier: TStringContainer;
     procedure FormCreate(Sender: TObject);
     procedure ExcelTreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
@@ -126,6 +129,7 @@ begin
             50: tArticle.Text := position;
             51: tPrice.Text := position;
             52: tQuantity.Text := position;
+            53:	tProperty.Text := position;
         end;
     end;
 end;
@@ -147,6 +151,12 @@ var
 	id:	integer;
 begin
     SaveLinks;
+
+    if ExcelTree.RootNodeCount <> 0 then
+    begin
+	    LoadPreview;
+    	DrawPreview;
+    end;
 end;
 
 procedure TForm1.SuppliersTreeFocusChanged(Sender: TBaseVirtualTree;

@@ -144,6 +144,8 @@ begin
     if Form1.OpenDialog1.Execute and Assigned(Form1.SuppliersTree.FocusedNode) then
     begin
         try
+        	SetLength(PreviewArray, 0);
+
             Excel := CreateOleObject('Excel.Application');
             Excel.Workbooks.Open(Form1.OpenDialog1.FileName, 0, true);
             Sheet := Excel.ActiveWorkbook.ActiveSheet;

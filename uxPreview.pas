@@ -6,7 +6,7 @@ procedure LoadPreview;
 procedure DrawPreview;
 
 var
-	PreviewArray:	array of array[0..3] of AnsiString;
+	PreviewArray:	array of array[0..4] of AnsiString;
 
 implementation
 
@@ -17,27 +17,35 @@ var
 	rows, cols, val2, K:	integer;
     val1:					Extended;
 begin
-	rows := VarArrayHighBound(ExcelArray, 1);
-    cols := 4;
+    rows := VarArrayHighBound(ExcelArray, 1);
+    cols := 5;
     K := 0;
 
     SetLength(PreviewArray, rows);
-    for var i: integer := 1 to rows-1 do
+    if 	(Excel_links[0] > -1) and
+        (Excel_links[1] > -1) and
+        (Excel_links[2] > -1) and
+        (Excel_links[3] > -1) then
     begin
-     	if  (String(ExcelArray[i, Excel_links[0]+1]) <> '') and
-        	(String(ExcelArray[i, Excel_links[1]+1]) <> '') and
-        	(TryStrToFloat(String(ExcelArray[i, Excel_links[2]+1]), val1)) and
-        	(TryStrToInt(String(ExcelArray[i, Excel_links[3]+1]), val2))
-        	then
+        for var i: integer := 1 to rows-1 do
         begin
-            PreviewArray[K, 0] := String(ExcelArray[i, Excel_links[0]+1]);
-            PreviewArray[K, 1] := String(ExcelArray[i, Excel_links[1]+1]);
-            PreviewArray[K, 2] := String(ExcelArray[i, Excel_links[2]+1]);
-            PreviewArray[K, 3] := String(ExcelArray[i, Excel_links[3]+1]);
-            Inc(K);
+            if  (String(ExcelArray[i, Excel_links[0]+1]) <> '') and
+                (String(ExcelArray[i, Excel_links[1]+1]) <> '') and
+                (TryStrToFloat(String(ExcelArray[i, Excel_links[2]+1]), val1)) and
+                (TryStrToInt(String(ExcelArray[i, Excel_links[3]+1]), val2)) then
+            begin
+                PreviewArray[K, 0] := String(ExcelArray[i, Excel_links[0]+1]);
+                PreviewArray[K, 1] := String(ExcelArray[i, Excel_links[1]+1]);
+                PreviewArray[K, 2] := String(ExcelArray[i, Excel_links[2]+1]);
+                PreviewArray[K, 3] := String(ExcelArray[i, Excel_links[3]+1]);
+                if Excel_links[4] > -1 then
+                    PreviewArray[K, 4] := String(ExcelArray[i, Excel_links[4]+1]);
+
+                Inc(K);
+            end;
         end;
+        SetLength(PreviewArray, K);
     end;
-    SetLength(PreviewArray, K);
 end;
 
 procedure DrawPreview;
