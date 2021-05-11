@@ -103,16 +103,16 @@
             <Form>Form1</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="uxADO_cutted.pas"/>
         <DCCReference Include="uxSQL.pas"/>
         <DCCReference Include="ufAddSupplier.pas">
             <Form>Form2</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="ufChangeLinks.pas">
-            <Form>Form3</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
+        <DCCReference Include="uxExcelLinks.pas"/>
+        <DCCReference Include="uxSuppliers.pas"/>
+        <DCCReference Include="uxExcel.pas"/>
+        <DCCReference Include="uxADO.pas"/>
+        <DCCReference Include="uxPreview.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -136,6 +136,12 @@
             </Delphi.Personality>
             <Deployment Version="3">
                 <DeployFile LocalName="Win32\Debug\ExcelParser.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>ExcelParser.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Win32\Release\ExcelParser.exe" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>ExcelParser.exe</RemoteName>
                         <Overwrite>true</Overwrite>

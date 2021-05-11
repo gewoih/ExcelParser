@@ -1,7 +1,7 @@
 object Form1: TForm1
   Left = 0
   Top = 0
-  ActiveControl = LinksTree
+  ActiveControl = PreviewTree
   Caption = 'Form1'
   ClientHeight = 689
   ClientWidth = 1114
@@ -12,6 +12,7 @@ object Form1: TForm1
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poScreenCenter
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 16
@@ -22,8 +23,6 @@ object Form1: TForm1
     Height = 689
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 1022
-    ExplicitHeight = 626
     object SuppliersTree: TVirtualStringTree
       Left = 1
       Top = 1
@@ -60,14 +59,13 @@ object Form1: TForm1
       Header.Font.Style = []
       Header.Height = 28
       Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
-      PopupMenu = PopupMenu1
+      PopupMenu = SuppliersTreePopupMenu
       TabOrder = 0
       TreeOptions.MiscOptions = [toAcceptOLEDrop, toCheckSupport, toEditable, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning, toVariableNodeHeight, toEditOnClick, toEditOnDblClick]
       TreeOptions.PaintOptions = [toHideFocusRect, toHideSelection, toShowDropmark, toShowHorzGridLines, toAlwaysHideSelection]
       OnBeforeCellPaint = SuppliersTreeBeforeCellPaint
       OnFocusChanged = SuppliersTreeFocusChanged
       OnGetText = SuppliersTreeGetText
-      ExplicitHeight = 688
       Columns = <
         item
           Alignment = taCenter
@@ -117,14 +115,11 @@ object Form1: TForm1
       Align = alClient
       TabOrder = 1
       UseDockManager = True
-      ExplicitLeft = 377
-      ExplicitWidth = 644
-      ExplicitHeight = 624
-      object PreviewTree: TVirtualStringTree
+      object ExcelTree: TVirtualStringTree
         Left = 1
         Top = 1
         Width = 750
-        Height = 420
+        Height = 368
         AccessibleName = #1054#1089#1090#1072#1090#1086#1082
         Align = alTop
         BorderStyle = bsNone
@@ -162,15 +157,16 @@ object Form1: TForm1
         TreeOptions.MiscOptions = [toAcceptOLEDrop, toCheckSupport, toEditable, toFullRepaintOnResize, toGridExtensions, toInitOnSave, toToggleOnDblClick, toWheelPanning, toVariableNodeHeight, toEditOnClick, toEditOnDblClick]
         TreeOptions.PaintOptions = [toHideFocusRect, toHideSelection, toShowDropmark, toShowHorzGridLines, toAlwaysHideSelection]
         OnBeforeCellPaint = SuppliersTreeBeforeCellPaint
-        OnGetText = PreviewTreeGetText
+        OnGetText = ExcelTreeGetText
+        OnKeyPress = ExcelTreeKeyPress
         Columns = <>
       end
       object FlatPanel2: TFlatPanel
         Tag = 1
         Left = 1
-        Top = 421
+        Top = 369
         Width = 750
-        Height = 265
+        Height = 317
         ParentColor = True
         ColorHighLight = 8623776
         ColorShadow = 8623776
@@ -178,14 +174,11 @@ object Form1: TForm1
         Align = alClient
         TabOrder = 1
         UseDockManager = True
-        ExplicitLeft = 49
-        ExplicitTop = 287
-        ExplicitHeight = 405
-        object LinksTree: TVirtualStringTree
+        object PreviewTree: TVirtualStringTree
           Left = 1
           Top = 193
           Width = 748
-          Height = 71
+          Height = 98
           AccessibleName = #1054#1089#1090#1072#1090#1086#1082
           Align = alClient
           Colors.BorderColor = 15987699
@@ -214,11 +207,9 @@ object Form1: TForm1
           Header.Font.Height = -13
           Header.Font.Name = 'Tahoma'
           Header.Font.Style = []
-          Header.Height = 25
+          Header.Height = 26
           TabOrder = 0
-          OnGetText = LinksTreeGetText
-          ExplicitTop = 216
-          ExplicitHeight = 188
+          OnGetText = PreviewTreeGetText
           Columns = <
             item
               Alignment = taCenter
@@ -266,35 +257,33 @@ object Form1: TForm1
           Align = alTop
           TabOrder = 1
           UseDockManager = True
-          ExplicitLeft = 5
-          ExplicitTop = 6
           object Label3: TLabel
-            Left = 415
+            Left = 473
             Top = 41
-            Width = 150
+            Width = 92
             Height = 16
-            Caption = #1057#1090#1086#1083#1073#1077#1094' "'#1062#1077#1085#1072' '#1074#1093#1086#1076' '#1042#1058#1050'"'
+            Caption = #1062#1077#1085#1072' '#1074#1093#1086#1076' '#1042#1058#1050':'
           end
           object Label1: TLabel
-            Left = 455
+            Left = 513
             Top = 73
-            Width = 110
+            Width = 52
             Height = 16
-            Caption = #1057#1090#1086#1083#1073#1077#1094' "'#1054#1089#1090#1072#1090#1082#1080'"'
+            Caption = #1054#1089#1090#1072#1090#1082#1080':'
           end
           object Label2: TLabel
-            Left = 68
+            Left = 126
             Top = 41
-            Width = 169
+            Width = 111
             Height = 16
-            Caption = #1057#1090#1086#1083#1073#1077#1094' "'#1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077' '#1040#1055'"'
+            Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077' '#1040#1055':'
           end
           object Label4: TLabel
-            Left = 107
-            Top = 73
-            Width = 130
+            Left = 165
+            Top = 71
+            Width = 72
             Height = 16
-            Caption = #1057#1090#1086#1083#1073#1077#1094' "'#1040#1088#1090#1080#1082#1091#1083' '#1040#1055'"'
+            Caption = #1040#1088#1090#1080#1082#1091#1083' '#1040#1055':'
           end
           object btSaveLinks: TButton
             Left = 569
@@ -305,34 +294,43 @@ object Form1: TForm1
             TabOrder = 0
             OnClick = btSaveLinksClick
           end
-          object cbPrice: TComboBox
-            Left = 571
-            Top = 37
-            Width = 122
+          object tName: TEdit
+            Left = 243
+            Top = 38
+            Width = 121
             Height = 24
             TabOrder = 1
           end
-          object cbQuantity: TComboBox
-            Left = 571
-            Top = 67
-            Width = 122
+          object tArticle: TEdit
+            Left = 243
+            Top = 68
+            Width = 121
             Height = 24
             TabOrder = 2
           end
-          object cbArticle: TComboBox
-            Left = 243
-            Top = 69
-            Width = 122
+          object tPrice: TEdit
+            Left = 571
+            Top = 38
+            Width = 121
             Height = 24
             TabOrder = 3
           end
-          object cbName: TComboBox
-            Left = 243
-            Top = 37
-            Width = 122
+          object tQuantity: TEdit
+            Left = 571
+            Top = 68
+            Width = 121
             Height = 24
             TabOrder = 4
           end
+        end
+        object btUploadPrice: TButton
+          Left = 1
+          Top = 291
+          Width = 748
+          Height = 25
+          Align = alBottom
+          Caption = #1054#1090#1087#1088#1072#1074#1080#1090#1100' '#1087#1088#1072#1081#1089
+          TabOrder = 2
         end
       end
     end
@@ -342,16 +340,16 @@ object Form1: TForm1
     Left = 40
     Top = 40
   end
-  object PopupMenu1: TPopupMenu
-    Left = 120
+  object SuppliersTreePopupMenu: TPopupMenu
+    Left = 144
     Top = 40
     object miAddSupplier: TMenuItem
       Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1087#1086#1089#1090#1072#1074#1097#1080#1082#1072
       OnClick = miAddSupplierClick
     end
-    object miChangeTemplate: TMenuItem
-      Caption = #1048#1079#1084#1077#1085#1080#1090#1100' '#1096#1072#1073#1083#1086#1085
-      OnClick = miChangeTemplateClick
+    object miAddExcel: TMenuItem
+      Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1087#1088#1072#1081#1089
+      OnClick = miAddExcelClick
     end
     object miDeleteSupplier: TMenuItem
       Caption = #1059#1076#1072#1083#1080#1090#1100' '#1087#1086#1089#1090#1072#1074#1097#1080#1082#1072
@@ -366,10 +364,11 @@ object Form1: TForm1
       '  VTK.dbo.AsStr(sd.id, '#39'2523'#39', 0) as tin,'
       '  VTK.dbo.AsStr(sd.id, '#39'2527'#39', 0) as name'
       'from VTK.dbo.spr_prop sp'
-      'join VTK.dbo.spr_data sd on sd.id = sp.linkid and sd.mark=1 '
+      'join VTK.dbo.spr_data sd on sd.id = sp.linkid and sd.mark=1'
       'join VTK_Excel.dbo.Suppliers on supplier_id = sd.id'
       'where sp.metaid = 2326 and VTK.dbo.AsStr(sd.id, '#39'2527'#39', 0) > '#39#39
-      'order by 1')
+      'order by 1'
+      '')
     Left = 40
     Top = 104
   end
