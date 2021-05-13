@@ -30,12 +30,16 @@ type
     Label4: TLabel;
     tName: TEdit;
     tArticle: TEdit;
-    tPrice: TEdit;
+    tBasePrice: TEdit;
     tQuantity: TEdit;
     btUploadPrice: TButton;
     Label5: TLabel;
-    tProperty: TEdit;
+    tYear: TEdit;
     scAddSupplier: TStringContainer;
+    label6: TLabel;
+    tPriceIn: TEdit;
+    Label7: TLabel;
+    ComboBox1: TComboBox;
     procedure FormCreate(Sender: TObject);
     procedure ExcelTreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
@@ -53,6 +57,7 @@ type
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure miDeleteSupplierClick(Sender: TObject);
     procedure ExcelTreeKeyPress(Sender: TObject; var Key: Char);
+    procedure btUploadPriceClick(Sender: TObject);
 end;
 
 var
@@ -61,13 +66,13 @@ var
 
 implementation
 
-uses ufAddSupplier, uxExcelLinks, uxSuppliers, uxExcel, uxPreview, uxADO, uxSQL;
+uses ufAddSupplier, uxExcelLinks, uxSuppliers, uxExcel, uxPreview, uxADO, uxSQL, uxDivisions;
 
 {$R *.dfm}
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-    if ConnectSQL(fcon) then
+    if ConnectSQL(fcon, 'vtk_excel') then
     	LoadSuppliers
     else
     	ShowMessage('Не удалось создать подключение.');
@@ -102,6 +107,14 @@ begin
 		DeleteSupplier(Suppliers[SuppliersTree.FocusedNode.Index].id);
 end;
 
+procedure TForm1.btUploadPriceClick(Sender: TObject);
+begin
+	if tDivision.Text <> '' then
+		UploadPrice
+    else
+    	ShowMessage('Введите код подразделения!');
+end;
+
 procedure TForm1.ExcelTreeGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: string);
@@ -127,9 +140,10 @@ begin
     	case Ord(Key) of
             49: tName.Text := position;
             50: tArticle.Text := position;
-            51: tPrice.Text := position;
-            52: tQuantity.Text := position;
-            53:	tProperty.Text := position;
+            51: tBasePrice.Text := position;
+            52: tPriceIn.Text := position;
+            53:	tQuantity.Text := position;
+            54: tYear.Text := position;
         end;
     end;
 end;
@@ -167,6 +181,7 @@ begin
         ExcelTree.Clear;
         PreviewTree.Clear;
         DrawLinks;
+        DrawDivisions;
 
         fLastNode := Node;
     end;

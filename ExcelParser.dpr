@@ -9,7 +9,8 @@ uses
   uxSuppliers in 'uxSuppliers.pas',
   uxExcel in 'uxExcel.pas',
   uxADO in 'uxADO.pas',
-  uxPreview in 'uxPreview.pas';
+  uxPreview in 'uxPreview.pas',
+  uxUtils in 'uxUtils.pas';
 
 {$R *.res}
 

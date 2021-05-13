@@ -45,10 +45,10 @@ object Form1: TForm1
       Colors.SelectionRectangleBorderColor = 15385233
       Colors.SelectionTextColor = clBlack
       Colors.TreeLineColor = 9471874
-      Colors.UnfocusedColor = 9695420
+      Colors.UnfocusedColor = 9693824
       Colors.UnfocusedSelectionColor = 15385233
       Colors.UnfocusedSelectionBorderColor = 15385233
-      Colors.HeaderColor = 9695420
+      Colors.HeaderColor = 9693824
       DefaultNodeHeight = 25
       Header.AutoSizeIndex = 3
       Header.DefaultHeight = 25
@@ -137,10 +137,10 @@ object Form1: TForm1
         Colors.SelectionRectangleBorderColor = 15385233
         Colors.SelectionTextColor = clBlack
         Colors.TreeLineColor = 9471874
-        Colors.UnfocusedColor = 9695224
+        Colors.UnfocusedColor = 9693628
         Colors.UnfocusedSelectionColor = 15385233
         Colors.UnfocusedSelectionBorderColor = 15385233
-        Colors.HeaderColor = 9695224
+        Colors.HeaderColor = 9693628
         DefaultNodeHeight = 25
         Header.AutoSizeIndex = -1
         Header.DefaultHeight = 25
@@ -195,10 +195,10 @@ object Form1: TForm1
           Colors.SelectionRectangleBorderColor = 15385233
           Colors.SelectionTextColor = clBlack
           Colors.TreeLineColor = 9471874
-          Colors.UnfocusedColor = 9695028
+          Colors.UnfocusedColor = 9693432
           Colors.UnfocusedSelectionColor = 15385233
           Colors.UnfocusedSelectionBorderColor = 15385233
-          Colors.HeaderColor = 9695028
+          Colors.HeaderColor = 9693432
           DefaultNodeHeight = 25
           Header.AutoSizeIndex = 0
           Header.DefaultHeight = 25
@@ -211,10 +211,10 @@ object Form1: TForm1
           TabOrder = 0
           OnGetText = PreviewTreeGetText
           ExplicitLeft = 5
-          ExplicitTop = 187
           Columns = <
             item
-              Alignment = taCenter
+              CaptionAlignment = taCenter
+              Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible, coAllowFocus, coUseCaptionAlignment, coEditable]
               Position = 0
               Width = 200
               Aggregate = False
@@ -222,7 +222,8 @@ object Form1: TForm1
               WideText = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077
             end
             item
-              Alignment = taCenter
+              CaptionAlignment = taCenter
+              Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible, coAllowFocus, coUseCaptionAlignment, coEditable]
               Position = 1
               Width = 120
               Aggregate = False
@@ -230,28 +231,40 @@ object Form1: TForm1
               WideText = #1040#1088#1090#1080#1082#1091#1083
             end
             item
-              Alignment = taCenter
+              CaptionAlignment = taCenter
+              Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible, coAllowFocus, coUseCaptionAlignment, coEditable]
               Position = 2
               Width = 100
               Aggregate = False
               FilterMode = 0
-              WideText = #1062#1077#1085#1072
+              WideText = #1041#1072#1079#1086#1074#1072#1103' '#1094#1077#1085#1072
             end
             item
-              Alignment = taCenter
+              CaptionAlignment = taCenter
+              Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible, coAllowFocus, coUseCaptionAlignment, coEditable]
               Position = 3
+              Width = 120
+              Aggregate = False
+              FilterMode = 0
+              WideText = #1062#1077#1085#1072' '#1074#1093#1086#1076' '#1042#1058#1050
+            end
+            item
+              CaptionAlignment = taCenter
+              Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible, coAllowFocus, coUseCaptionAlignment, coEditable]
+              Position = 4
               Width = 100
               Aggregate = False
               FilterMode = 0
               WideText = #1054#1089#1090#1072#1090#1086#1082
             end
             item
-              Alignment = taCenter
-              Position = 4
-              Width = 150
+              CaptionAlignment = taCenter
+              Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible, coAllowFocus, coUseCaptionAlignment, coEditable]
+              Position = 5
+              Width = 100
               Aggregate = False
               FilterMode = 0
-              WideText = #1061#1072#1088#1072#1082#1090#1077#1088#1080#1089#1090#1080#1082#1072
+              WideText = #1043#1086#1076
             end>
         end
         object FlatPanel3: TFlatPanel
@@ -267,40 +280,56 @@ object Form1: TForm1
           Align = alTop
           TabOrder = 1
           UseDockManager = True
+          ExplicitLeft = 5
+          ExplicitTop = 6
           object Label3: TLabel
-            Left = 452
+            Left = 314
             Top = 41
-            Width = 113
+            Width = 107
             Height = 16
-            Caption = #1062#1077#1085#1072' '#1074#1093#1086#1076' '#1042#1058#1050' (3):'
+            Caption = #1041#1072#1079#1086#1074#1072#1103' '#1094#1077#1085#1072' (3):'
           end
           object Label1: TLabel
-            Left = 492
-            Top = 71
+            Left = 564
+            Top = 41
             Width = 73
             Height = 16
-            Caption = #1054#1089#1090#1072#1090#1082#1080' (4):'
+            Caption = #1054#1089#1090#1072#1090#1082#1080' (5):'
           end
           object Label2: TLabel
-            Left = 105
+            Left = 21
             Top = 41
             Width = 132
             Height = 16
             Caption = #1053#1072#1080#1084#1077#1085#1086#1074#1072#1085#1080#1077' '#1040#1055' (1):'
           end
           object Label4: TLabel
-            Left = 144
-            Top = 71
+            Left = 60
+            Top = 68
             Width = 93
             Height = 16
             Caption = #1040#1088#1090#1080#1082#1091#1083' '#1040#1055' (2):'
           end
           object Label5: TLabel
-            Left = 411
-            Top = 99
+            Left = 590
+            Top = 73
+            Width = 47
+            Height = 16
+            Caption = #1043#1086#1076' (6):'
+          end
+          object label6: TLabel
+            Left = 33
+            Top = 139
             Width = 120
             Height = 16
-            Caption = #1061#1072#1088#1072#1082#1090#1077#1088#1080#1089#1090#1080#1082#1072' (5):'
+            Caption = #1050#1086#1076' '#1087#1086#1076#1088#1072#1079#1076#1077#1083#1077#1085#1080#1103':'
+          end
+          object Label7: TLabel
+            Left = 307
+            Top = 73
+            Width = 113
+            Height = 16
+            Caption = #1062#1077#1085#1072' '#1074#1093#1086#1076' '#1042#1058#1050' (4):'
           end
           object btSaveLinks: TButton
             Left = 569
@@ -312,39 +341,53 @@ object Form1: TForm1
             OnClick = btSaveLinksClick
           end
           object tName: TEdit
-            Left = 243
+            Left = 159
             Top = 38
             Width = 121
             Height = 24
             TabOrder = 1
           end
           object tArticle: TEdit
-            Left = 243
+            Left = 159
             Top = 68
             Width = 121
             Height = 24
             TabOrder = 2
           end
-          object tPrice: TEdit
-            Left = 571
+          object tBasePrice: TEdit
+            Left = 426
             Top = 38
             Width = 121
             Height = 24
             TabOrder = 3
           end
           object tQuantity: TEdit
-            Left = 571
-            Top = 68
+            Left = 643
+            Top = 38
             Width = 121
             Height = 24
             TabOrder = 4
           end
-          object tProperty: TEdit
-            Left = 411
-            Top = 121
+          object tYear: TEdit
+            Left = 643
+            Top = 68
             Width = 121
             Height = 24
             TabOrder = 5
+          end
+          object tPriceIn: TEdit
+            Left = 426
+            Top = 68
+            Width = 121
+            Height = 24
+            TabOrder = 6
+          end
+          object ComboBox1: TComboBox
+            Left = 159
+            Top = 136
+            Width = 270
+            Height = 24
+            TabOrder = 7
           end
         end
         object btUploadPrice: TButton
@@ -355,6 +398,7 @@ object Form1: TForm1
           Align = alBottom
           Caption = #1054#1090#1087#1088#1072#1074#1080#1090#1100' '#1087#1088#1072#1081#1089
           TabOrder = 2
+          OnClick = btUploadPriceClick
         end
       end
     end

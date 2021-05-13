@@ -5,7 +5,7 @@ interface
     procedure SaveLinks;
 
 var
-	Excel_links:	array [0..4] of integer;
+	Excel_links:	array [0..5] of integer;
 
 implementation
 
@@ -26,9 +26,10 @@ begin
     begin
         Form1.tName.Text := '-1';
         Form1.tArticle.Text := '-1';
-        Form1.tPrice.Text := '-1';
+        Form1.tBasePrice.Text := '-1';
+        Form1.tPriceIn.Text := '-1';
         Form1.tQuantity.Text := '-1';
-        Form1.tProperty.Text := '-1';
+        Form1.tYear.Text := '-1';
     end
     else
     begin
@@ -40,9 +41,10 @@ begin
 
         Form1.tName.Text := Excel_Links[0].ToString;
         Form1.tArticle.Text := Excel_Links[1].ToString;
-        Form1.tPrice.Text := Excel_Links[2].ToString;
-        Form1.tQuantity.Text := Excel_Links[3].ToString;
-        Form1.tProperty.Text := Excel_Links[4].ToString;
+        Form1.tBasePrice.Text := Excel_Links[2].ToString;
+        Form1.tPriceIn.Text := Excel_Links[3].ToString;
+        Form1.tQuantity.Text := Excel_Links[4].ToString;
+        Form1.tYear.Text := Excel_Links[5].ToString;
     end;
 end;
 
@@ -53,12 +55,14 @@ begin
 	try
     	Excel_links[0] := StrToInt(Form1.tName.Text);
         Excel_links[1] := StrToInt(Form1.tArticle.Text);
-        Excel_links[2] := StrToInt(Form1.tPrice.Text);
-        Excel_links[3] := StrToInt(Form1.tQuantity.Text);
-        Excel_links[4] := StrToInt(Form1.tProperty.Text);
+        Excel_links[2] := StrToInt(Form1.tBasePrice.Text);
+        Excel_links[3] := StrToInt(Form1.tPriceIn.Text);
+        Excel_links[4] := StrToInt(Form1.tQuantity.Text);
+        Excel_links[5] := StrToInt(Form1.tYear.Text);
 
-    	if (Excel_links[0] <> null) and (Excel_links[1] <> null)
-        and (Excel_links[2] <> null) and (Excel_links[3] <> null) then
+    	if (Excel_links[0] <> null) and (Excel_links[1] <> null) and
+       	   (Excel_links[2] <> null) and (Excel_links[3] <> null) and
+           (Excel_links[4] <> null) then
         begin
             id := Suppliers[Form1.SuppliersTree.FocusedNode.Index].id;
 
@@ -69,7 +73,8 @@ begin
             + '(' + id.ToString + ', 0, 2, ' + QuotedStr(Excel_links[1].ToString) + '),'
             + '(' + id.ToString + ', 0, 3, ' + QuotedStr(Excel_links[2].ToString) + '),'
             + '(' + id.ToString + ', 0, 4, ' + QuotedStr(Excel_links[3].ToString) + '),'
-            + '(' + id.ToString + ', 0, 5, ' + QuotedStr(Excel_links[4].ToString) + ')');
+            + '(' + id.ToString + ', 0, 5, ' + QuotedStr(Excel_links[4].ToString) + '),'
+            + '(' + id.ToString + ', 0, 6, ' + QuotedStr(Excel_links[5].ToString) + ')');
 
             ShowMessage('Столбцы успешно привязаны.');
         end
