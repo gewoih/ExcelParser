@@ -2,9 +2,8 @@ unit uxSQL;
 
 interface
 
-function ConnectSQL(Var Con: OleVariant; Base: AnsiString; Suff: string = ''): boolean;
-function GetConStr_VTK_Excel: string;
-function GetConStr_VTK: string;
+function ConnectSQL(Var Con: OleVariant; Suff: string = ''): boolean;
+function GetConStr: String;
 
 var
 	fcon:	OleVariant;
@@ -13,7 +12,7 @@ implementation
 
 uses System.Classes, System.Win.ComObj, System.SysUtils, uxParams;
 
-function GetConStr_VTK_Excel: string;
+function GetConStr: string;
 begin
   With TStringList.Create do
   try
@@ -32,38 +31,16 @@ begin
   end;
 end;
 
-function GetConStr_VTK: string;
-begin
-  With TStringList.Create do
-  try
-    LineBreak := ';';
-    Values['Provider'] := fParams.AsStr['sql\Prov'];
-    Values['Persist Security Info'] := 'False';
-    Values['Data Source'] := fParams.AsStr['sql\Serv'];
-    Values['Initial Catalog'] := 'VTK';
-    Values['User ID'] := fParams.AsStr['sql\User'];
-    Values['Application Name'] := ChangeFileExt(ExtractFileName(ParamStr(0)), '');
-    Values['MultipleActiveResultSets'] := 'True';
-    Values['Password'] := fParams.AsStr['sql\Pass'];
-    Result := Text;
-  finally
-    Free;
-  end;
-end;
-
-function ConnectSQL(Var Con: OleVariant; base: AnsiString; Suff: string = ''): boolean;
-var S: AnsiString;
+function ConnectSQL(Var Con: OleVariant; Suff: string = ''): boolean;
+var
+	S: AnsiString;
 begin
   try
     Con := CreateOleObject('ADODB.Connection');
     Con.CursorLocation:= 3;
     Con.CommandTimeout := 60000;
     Con.ConnectionTimeout := 10;
-
-    if base = 'vtk' then
-    	Con.Open(GetConStr_VTK)
-    else if base = 'vtk_excel' then
-    	Con.Open(GetConStr_VTK_Excel);
+    Con.Open(GetConStr);
 
     Result := True;
   except

@@ -39,7 +39,9 @@ type
     label6: TLabel;
     tPriceIn: TEdit;
     Label7: TLabel;
-    ComboBox1: TComboBox;
+    cbDivisions: TComboBox;
+    scLoadDivisions: TStringContainer;
+    Splitter1: TSplitter;
     procedure FormCreate(Sender: TObject);
     procedure ExcelTreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
@@ -72,7 +74,7 @@ uses ufAddSupplier, uxExcelLinks, uxSuppliers, uxExcel, uxPreview, uxADO, uxSQL,
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-    if ConnectSQL(fcon, 'vtk_excel') then
+    if ConnectSQL(fcon) then
     	LoadSuppliers
     else
     	ShowMessage('Не удалось создать подключение.');
@@ -109,10 +111,10 @@ end;
 
 procedure TForm1.btUploadPriceClick(Sender: TObject);
 begin
-	if tDivision.Text <> '' then
+	if cbDivisions.ItemIndex <> -1 then
 		UploadPrice
     else
-    	ShowMessage('Введите код подразделения!');
+    	ShowMessage('Выберите подразделение!');
 end;
 
 procedure TForm1.ExcelTreeGetText(Sender: TBaseVirtualTree;

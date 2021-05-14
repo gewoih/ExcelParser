@@ -45,10 +45,10 @@ object Form1: TForm1
       Colors.SelectionRectangleBorderColor = 15385233
       Colors.SelectionTextColor = clBlack
       Colors.TreeLineColor = 9471874
-      Colors.UnfocusedColor = 9693824
+      Colors.UnfocusedColor = 9695420
       Colors.UnfocusedSelectionColor = 15385233
       Colors.UnfocusedSelectionBorderColor = 15385233
-      Colors.HeaderColor = 9693824
+      Colors.HeaderColor = 9695420
       DefaultNodeHeight = 25
       Header.AutoSizeIndex = 3
       Header.DefaultHeight = 25
@@ -115,6 +115,15 @@ object Form1: TForm1
       Align = alClient
       TabOrder = 1
       UseDockManager = True
+      object Splitter1: TSplitter
+        Left = 1
+        Top = 369
+        Width = 750
+        Height = 3
+        Cursor = crVSplit
+        Align = alTop
+        ExplicitWidth = 317
+      end
       object ExcelTree: TVirtualStringTree
         Left = 1
         Top = 1
@@ -137,10 +146,10 @@ object Form1: TForm1
         Colors.SelectionRectangleBorderColor = 15385233
         Colors.SelectionTextColor = clBlack
         Colors.TreeLineColor = 9471874
-        Colors.UnfocusedColor = 9693628
+        Colors.UnfocusedColor = 9695224
         Colors.UnfocusedSelectionColor = 15385233
         Colors.UnfocusedSelectionBorderColor = 15385233
-        Colors.HeaderColor = 9693628
+        Colors.HeaderColor = 9695224
         DefaultNodeHeight = 25
         Header.AutoSizeIndex = -1
         Header.DefaultHeight = 25
@@ -164,9 +173,9 @@ object Form1: TForm1
       object FlatPanel2: TFlatPanel
         Tag = 1
         Left = 1
-        Top = 369
+        Top = 372
         Width = 750
-        Height = 317
+        Height = 314
         ParentColor = True
         ColorHighLight = 8623776
         ColorShadow = 8623776
@@ -174,11 +183,13 @@ object Form1: TForm1
         Align = alClient
         TabOrder = 1
         UseDockManager = True
+        ExplicitTop = 369
+        ExplicitHeight = 317
         object PreviewTree: TVirtualStringTree
           Left = 1
-          Top = 193
+          Top = 209
           Width = 748
-          Height = 98
+          Height = 52
           AccessibleName = #1054#1089#1090#1072#1090#1086#1082
           Align = alClient
           Colors.BorderColor = 15987699
@@ -195,10 +206,10 @@ object Form1: TForm1
           Colors.SelectionRectangleBorderColor = 15385233
           Colors.SelectionTextColor = clBlack
           Colors.TreeLineColor = 9471874
-          Colors.UnfocusedColor = 9693432
+          Colors.UnfocusedColor = 9695028
           Colors.UnfocusedSelectionColor = 15385233
           Colors.UnfocusedSelectionBorderColor = 15385233
-          Colors.HeaderColor = 9693432
+          Colors.HeaderColor = 9695028
           DefaultNodeHeight = 25
           Header.AutoSizeIndex = 0
           Header.DefaultHeight = 25
@@ -211,6 +222,8 @@ object Form1: TForm1
           TabOrder = 0
           OnGetText = PreviewTreeGetText
           ExplicitLeft = 5
+          ExplicitTop = 193
+          ExplicitHeight = 98
           Columns = <
             item
               CaptionAlignment = taCenter
@@ -272,7 +285,7 @@ object Form1: TForm1
           Left = 1
           Top = 1
           Width = 748
-          Height = 192
+          Height = 208
           ParentColor = True
           ColorHighLight = 8623776
           ColorShadow = 8623776
@@ -280,8 +293,6 @@ object Form1: TForm1
           Align = alTop
           TabOrder = 1
           UseDockManager = True
-          ExplicitLeft = 5
-          ExplicitTop = 6
           object Label3: TLabel
             Left = 314
             Top = 41
@@ -333,7 +344,7 @@ object Form1: TForm1
           end
           object btSaveLinks: TButton
             Left = 569
-            Top = 153
+            Top = 161
             Width = 169
             Height = 33
             Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100' '#1087#1088#1080#1074#1103#1079#1082#1091
@@ -382,7 +393,7 @@ object Form1: TForm1
             Height = 24
             TabOrder = 6
           end
-          object ComboBox1: TComboBox
+          object cbDivisions: TComboBox
             Left = 159
             Top = 136
             Width = 270
@@ -392,13 +403,14 @@ object Form1: TForm1
         end
         object btUploadPrice: TButton
           Left = 1
-          Top = 291
+          Top = 261
           Width = 748
-          Height = 25
+          Height = 52
           Align = alBottom
           Caption = #1054#1090#1087#1088#1072#1074#1080#1090#1100' '#1087#1088#1072#1081#1089
           TabOrder = 2
           OnClick = btUploadPriceClick
+          ExplicitTop = 264
         end
       end
     end
@@ -487,6 +499,17 @@ object Form1: TForm1
         'insert into Excel_templates values (@id, 0, 1, '#39'-1'#39'), (@id, 0, 2' +
         ', '#39'-1'#39'), (@id, 0, 3, '#39'-1'#39'), (@id, 0, 4, '#39'-1'#39'), (@id, 0, 5, '#39'-1'#39')')
     Left = 40
+    Top = 168
+  end
+  object scLoadDivisions: TStringContainer
+    Items.Strings = (
+      
+        'select linkid, VTK.dbo.AsStr(linkid, 2597, 12) as code,  VTK.dbo' +
+        '.AsStr(linkid, 4406, 0) as name'
+      'from VTK.dbo.spr_prop sp'
+      'join  VTK.dbo.spr_data sd on sd.id = sp.linkid and sd.mark = 1'
+      'where sp.metaid = 4340 and sp.value = %d order by name')
+    Left = 120
     Top = 168
   end
 end

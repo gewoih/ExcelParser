@@ -11,7 +11,8 @@ var
 
 implementation
 
-uses MainForm, VirtualTrees, System.Variants, uxExcel, SysUtils, uxExcelLinks, Dialogs, Classes, uxUtils;
+uses MainForm, VirtualTrees, System.Variants, uxExcel, SysUtils, uxExcelLinks, Dialogs, Classes,
+uxUtils, uxDivisions, Vcl.Controls, uxSQL;
 
 procedure LoadPreview;
 function ParseYear(input_str: String): AnsiString;
@@ -48,22 +49,21 @@ begin
     if 	(Excel_links[0] > -1) and
         (Excel_links[1] > -1) and
         (Excel_links[2] > -1) and
-        (Excel_links[3] > -1) and
-        (Excel_links[4] > -1) then
+        (Excel_links[3] > -1) then
     begin
         for var i: integer := 1 to rows-1 do
         begin
             if  (String(ExcelArray[i, Excel_links[0]+1]) <> '') and
                 (String(ExcelArray[i, Excel_links[1]+1]) <> '') and
                 (TryStrToFloat(String(ExcelArray[i, Excel_links[2]+1]), val1)) and
-                (TryStrToFloat(String(ExcelArray[i, Excel_links[3]+1]), val1)) and
-                (TryStrToInt(String(ExcelArray[i, Excel_links[4]+1]), val2))  then
+                (TryStrToFloat(String(ExcelArray[i, Excel_links[3]+1]), val1)) then
             begin
                 PreviewArray[K, 0] := String(ExcelArray[i, Excel_links[0]+1]);
                 PreviewArray[K, 1] := String(ExcelArray[i, Excel_links[1]+1]);
                 PreviewArray[K, 2] := String(ExcelArray[i, Excel_links[2]+1]);
                 PreviewArray[K, 3] := String(ExcelArray[i, Excel_links[3]+1]);
-                PreviewArray[K, 4] := String(ExcelArray[i, Excel_links[4]+1]);
+                if Excel_links[4] > -1 then
+                	PreviewArray[K, 4] := String(ExcelArray[i, Excel_links[4]+1]);
                 if Excel_links[5] > -1 then
                 begin
                     PreviewArray[K, 5] := ParseYear(String(ExcelArray[i, Excel_links[5]+1]));
@@ -83,7 +83,7 @@ end;
 
 procedure DrawPreview;
 var
-	N:						PVirtualNode;
+	N:	PVirtualNode;
 begin
 	try
     	if Length(PreviewArray) > 0 then
@@ -109,32 +109,42 @@ end;
 
 procedure UploadPrice;
 var
-  S: 		string;
-  So: 		tStringlist;
-  regid:	AnsiString;
+  S: 				string;
+  So: 				tStringlist;
+  regid:			AnsiString;
+  buttonSelected:	Integer;
 begin
 	try
-        So := tStringlist.Create;
-        regid := Form1.tDivision.Text;
+    	buttonSelected := MessageDlg('¬ы действительно хотите загрузить ' + Length(PreviewArray).ToString +
+        ' позиций дл€ подразделени€ ' + Form1.cbDivisions.Text + '?', mtConfirmation, mbOKCancel, 0);
 
-        So.Add('if object_id(''tempdb..##temp_rest'') <> 0 drop table ##temp_rest');
-        So.Add('select * into ##temp_rest from (values');
-
-        for var i := 0 to High(PreviewArray) do
+  		if buttonSelected = mrOK then
         begin
-            So.Add('(' +
-            QuotedStr(PreviewArray[i][1]) + ',' +
-            'null' + ',' +
-            PreviewArray[i][4] + ',' +
-        	PreviewArray[i][3] + ',' +
-            PreviewArray[i][2] + ',' +
-            QuotedStr(PreviewArray[i][0]) + ')' +
-            iif(i = High(PreviewArray), '', ','));
-        end;
+            So := tStringlist.Create;
+            regid := Divisions[Form1.cbDivisions.ItemIndex];
 
-        So.Add(') x (art, ap, qty, costin, cost, name)');
-        So.Add('exec PreparePrice ' + QuotedStr(regid) + ',' + QuotedStr(FormatDateTime('yyyyMMdd', Now)));
-        So.SaveToFile('D:\test\test.sql');
+            So.Add('if object_id(''tempdb..##temp_rest'') <> 0 drop table ##temp_rest');
+            So.Add('select * into ##temp_rest from (values');
+
+            for var i := 0 to High(PreviewArray) do
+            begin
+                So.Add('(' +
+                QuotedStr(PreviewArray[i][1]) + ',' +
+                '1' + ',' +
+                PreviewArray[i][4] + ',' +
+                PreviewArray[i][3] + ',' +
+                PreviewArray[i][2] + ',' +
+                QuotedStr(PreviewArray[i][0]) + ')' +
+                iif(i = High(PreviewArray), '', ','));
+            end;
+
+            So.Add(') x (art, ap, qty, costin, cost, name)');
+            So.Add('exec VTK.dbo.PreparePrice ' + QuotedStr(regid) + ',' + QuotedStr(FormatDateTime('yyyyMMdd', Now)));
+            So.SaveToFile('D:\test\test.sql');
+            fcon.Execute(So.Text);
+
+            ShowMessage('ѕрайс успешно загружен.');
+        end;
     finally
     	So.Free;
     end;

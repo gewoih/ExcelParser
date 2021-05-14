@@ -10,7 +10,8 @@ uses
   uxExcel in 'uxExcel.pas',
   uxADO in 'uxADO.pas',
   uxPreview in 'uxPreview.pas',
-  uxUtils in 'uxUtils.pas';
+  uxUtils in 'uxUtils.pas',
+  uxDivisions in 'uxDivisions.pas';
 
 {$R *.res}
 

@@ -36,10 +36,10 @@ object Form2: TForm2
     Colors.SelectionRectangleBorderColor = 15385233
     Colors.SelectionTextColor = clBlack
     Colors.TreeLineColor = 9471874
-    Colors.UnfocusedColor = 9694020
+    Colors.UnfocusedColor = 9695616
     Colors.UnfocusedSelectionColor = 15385233
     Colors.UnfocusedSelectionBorderColor = 15385233
-    Colors.HeaderColor = 9694020
+    Colors.HeaderColor = 9695616
     Header.AutoSizeIndex = 2
     Header.Font.Charset = DEFAULT_CHARSET
     Header.Font.Color = clWindowText
@@ -93,7 +93,10 @@ object Form2: TForm2
       '  VTK.dbo.AsStr(sd.id, '#39'2527'#39', 0)'
       'from VTK.dbo.spr_prop sp'
       'join VTK.dbo.spr_data sd on sd.id = sp.linkid and sd.mark=1'
-      'where sp.metaid = 2326 and VTK.dbo.AsStr(sd.id, '#39'2527'#39', 0) > '#39#39
+      
+        'where sp.metaid = 2326 and VTK.dbo.AsStr(sd.id, '#39'2527'#39', 0) > '#39#39' ' +
+        'and exists(select 1 from VTK.dbo.spr_prop where metaid = 4340 an' +
+        'd value = sd.id)'
       'order by 3')
     Left = 40
     Top = 32
