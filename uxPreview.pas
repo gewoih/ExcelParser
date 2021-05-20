@@ -7,25 +7,21 @@ procedure DrawPreview;
 procedure UploadPrice;
 
 var
-	PreviewArray:	array of array[0..5] of AnsiString;
+	PreviewArray:	array of array[0..7] of AnsiString;
 
 implementation
 
 uses MainForm, VirtualTrees, System.Variants, uxExcel, SysUtils, uxExcelLinks, Dialogs, Classes,
-uxUtils, uxDivisions, Vcl.Controls, uxSQL;
+uxUtils, uxDivisions, Vcl.Controls, uxSQL, System.UITypes;
 
 procedure LoadPreview;
-function ParseYear(input_str: String): AnsiString;
+function ParseYear(input_str: AnsiString): AnsiString;
 var
-	S:	AnsiString;
     C:	AnsiChar;
-    k:	integer;
 begin
-	S := input_str;
-
     Result := '';
 
-    for C in S do
+    for C in input_str do
     begin
         if byte(C) in [48..57] then
         	Result := Result + C
@@ -38,35 +34,53 @@ begin
     if Length(Result) <> 4 then
     	Result := '';
 end;
+function GetMaxLink: integer;
+begin
+	Result := -1;
+    for var i: integer := 0 to High(Excel_links) do
+    begin
+        if Excel_links[i] > Result then
+        	Result := Excel_links[i];
+    end;
+end;
+
 var
-	rows, val2, K:	integer;
+	rows, cols, K:	integer;
     val1:			Extended;
 begin
-    rows := VarArrayHighBound(ExcelArray, 1);
+	SetLength(PreviewArray, 0);
+    rows := VarArrayHighBound(ExcelArray[tab_index], 1);
+    cols := VarArrayHighBound(ExcelArray[tab_index], 2);
     K := 0;
 
-    SetLength(PreviewArray, rows);
     if 	(Excel_links[0] > -1) and
         (Excel_links[1] > -1) and
         (Excel_links[2] > -1) and
-        (Excel_links[3] > -1) then
+        (Excel_links[3] > -1) and
+        (cols > GetMaxLink) then
     begin
-        for var i: integer := 1 to rows-1 do
+    	SetLength(PreviewArray, rows);
+
+        for var i: integer := VarArrayLowBound(ExcelArray[tab_index], 1) to rows do
         begin
-            if  (String(ExcelArray[i, Excel_links[0]+1]) <> '') and
-                (String(ExcelArray[i, Excel_links[1]+1]) <> '') and
-                (TryStrToFloat(String(ExcelArray[i, Excel_links[2]+1]), val1)) and
-                (TryStrToFloat(String(ExcelArray[i, Excel_links[3]+1]), val1)) then
+            if  (String(ExcelArray[tab_index][i, Excel_links[0]+1]) <> '') and
+                (String(ExcelArray[tab_index][i, Excel_links[1]+1]) <> '') and
+                (TryStrToFloat(String(ExcelArray[tab_index][i, Excel_links[2]+1]), val1)) and
+                (TryStrToFloat(String(ExcelArray[tab_index][i, Excel_links[3]+1]), val1)) then
             begin
-                PreviewArray[K, 0] := String(ExcelArray[i, Excel_links[0]+1]);
-                PreviewArray[K, 1] := String(ExcelArray[i, Excel_links[1]+1]);
-                PreviewArray[K, 2] := String(ExcelArray[i, Excel_links[2]+1]);
-                PreviewArray[K, 3] := String(ExcelArray[i, Excel_links[3]+1]);
+                PreviewArray[K, 0] := String(ExcelArray[tab_index][i, Excel_links[0]+1]);
+                PreviewArray[K, 1] := String(ExcelArray[tab_index][i, Excel_links[1]+1]);
+                PreviewArray[K, 2] := String(ExcelArray[tab_index][i, Excel_links[2]+1]);
+                PreviewArray[K, 3] := String(ExcelArray[tab_index][i, Excel_links[3]+1]);
+
                 if Excel_links[4] > -1 then
-                	PreviewArray[K, 4] := String(ExcelArray[i, Excel_links[4]+1]);
+                	PreviewArray[K, 4] := String(ExcelArray[tab_index][i, Excel_links[4]+1])
+                else
+                	PreviewArray[K, 4] := '1';
+
                 if Excel_links[5] > -1 then
                 begin
-                    PreviewArray[K, 5] := ParseYear(String(ExcelArray[i, Excel_links[5]+1]));
+                    PreviewArray[K, 5] := ParseYear(String(ExcelArray[tab_index][i, Excel_links[5]+1]));
                     if PreviewArray[K, 5] <> '' then
                 	begin
                         PreviewArray[K, 0] := PreviewArray[K, 0] + ', ' + PreviewArray[K, 5] + 'г.';
@@ -74,6 +88,19 @@ begin
                     end;
                 end;
 
+                if Excel_links[6] > -1 then
+                begin
+                    PreviewArray[K, 6] := String(ExcelArray[tab_index][i, Excel_links[6]+1]);
+                    if PreviewArray[K, 6] <> '' then
+                        PreviewArray[K, 0] := PreviewArray[K, 0] + ', ' + PreviewArray[K, 6];
+                end;
+
+                if Excel_links[7] > -1 then
+                begin
+                    PreviewArray[K, 7] := String(ExcelArray[tab_index][i, Excel_links[7]+1]);
+                    if PreviewArray[K, 7] <> '' then
+                        PreviewArray[K, 0] := PreviewArray[K, 0] + ', ' + PreviewArray[K, 7];
+                end;
                 Inc(K);
             end;
         end;
@@ -85,11 +112,11 @@ procedure DrawPreview;
 var
 	N:	PVirtualNode;
 begin
-	try
-    	if Length(PreviewArray) > 0 then
-        begin
+	Form1.PreviewTree.Clear;
+    if Length(PreviewArray) > 0 then
+    begin
+        try
             Form1.PreviewTree.BeginUpdate;
-            Form1.PreviewTree.Clear;
 
             Form1.PreviewTree.RootNodeCount := Length(PreviewArray);
 
@@ -98,18 +125,17 @@ begin
             begin
                 N.SetData(pointer(N.Index));
                 N := N.NextSibling;
-            end
+        end
+        finally
+            Form1.PreviewTree.Header.AutoFitColumns(false);
+            Form1.PreviewTree.EndUpdate;
+            Form1.PreviewTree.Invalidate;
         end;
-    finally
-        Form1.PreviewTree.Header.AutoFitColumns(false);
-        Form1.PreviewTree.EndUpdate;
-        Form1.PreviewTree.Invalidate;
     end;
 end;
 
 procedure UploadPrice;
 var
-  S: 				string;
   So: 				tStringlist;
   regid:			AnsiString;
   buttonSelected:	Integer;
@@ -120,7 +146,7 @@ begin
 
   		if buttonSelected = mrOK then
         begin
-            So := tStringlist.Create;
+        	So := tStringlist.Create;
             regid := Divisions[Form1.cbDivisions.ItemIndex];
 
             So.Add('if object_id(''tempdb..##temp_rest'') <> 0 drop table ##temp_rest');
@@ -140,7 +166,7 @@ begin
 
             So.Add(') x (art, ap, qty, costin, cost, name)');
             So.Add('exec VTK.dbo.PreparePrice ' + QuotedStr(regid) + ',' + QuotedStr(FormatDateTime('yyyyMMdd', Now)));
-            So.SaveToFile('D:\test\test.sql');
+            So.SaveToFile('C:\ExcelParser\ExcelParser.sql');
             fcon.Execute(So.Text);
 
             ShowMessage('Прайс успешно загружен.');

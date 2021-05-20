@@ -5,7 +5,7 @@ interface
     procedure SaveLinks;
 
 var
-	Excel_links:	array [0..5] of integer;
+	Excel_links:	array [0..7] of integer;
 
 implementation
 
@@ -18,34 +18,24 @@ var
     index:	integer;
 begin
 	index := Suppliers[Form1.SuppliersTree.FocusedNode.Index].id;
-    fillchar(Excel_links,sizeof(Excel_links), -1);
+    fillchar(Excel_links, sizeof(Excel_links), -1);
 
     R := fcon.Execute('select * from Excel_templates where row = 0 and linkid = ' + index.ToString);
 
-    if R.RecordCount = 0 then
+    for var i: integer := 0 to R.RecordCount-1 do
     begin
-        Form1.tName.Text := '-1';
-        Form1.tArticle.Text := '-1';
-        Form1.tBasePrice.Text := '-1';
-        Form1.tPriceIn.Text := '-1';
-        Form1.tQuantity.Text := '-1';
-        Form1.tYear.Text := '-1';
-    end
-    else
-    begin
-        for var i: integer := 0 to R.RecordCount-1 do
-        begin
-            Excel_links[i] := AsInt(R, 'val');
-            R.MoveNext;
-        end;
-
-        Form1.tName.Text := Excel_Links[0].ToString;
-        Form1.tArticle.Text := Excel_Links[1].ToString;
-        Form1.tBasePrice.Text := Excel_Links[2].ToString;
-        Form1.tPriceIn.Text := Excel_Links[3].ToString;
-        Form1.tQuantity.Text := Excel_Links[4].ToString;
-        Form1.tYear.Text := Excel_Links[5].ToString;
+        Excel_links[i] := AsInt(R, 'val');
+        R.MoveNext;
     end;
+
+    Form1.tName.Text := Excel_Links[0].ToString;
+    Form1.tArticle.Text := Excel_Links[1].ToString;
+    Form1.tBasePrice.Text := Excel_Links[2].ToString;
+    Form1.tPriceIn.Text := Excel_Links[3].ToString;
+    Form1.tQuantity.Text := Excel_Links[4].ToString;
+    Form1.tYear.Text := Excel_Links[5].ToString;
+    Form1.tVolume.Text := Excel_links[6].ToString;
+    Form1.tStrength.Text := Excel_links[7].ToString;
 end;
 
 procedure SaveLinks;
@@ -59,10 +49,11 @@ begin
         Excel_links[3] := StrToInt(Form1.tPriceIn.Text);
         Excel_links[4] := StrToInt(Form1.tQuantity.Text);
         Excel_links[5] := StrToInt(Form1.tYear.Text);
+        Excel_links[6] := StrToInt(Form1.tVolume.Text);
+        Excel_links[7] := StrToInt(Form1.tStrength.Text);
 
-    	if (Excel_links[0] <> null) and (Excel_links[1] <> null) and
-       	   (Excel_links[2] <> null) and (Excel_links[3] <> null) and
-           (Excel_links[4] <> null) then
+    	if (Excel_links[0] > -1) and (Excel_links[1] > -1) and
+       	   (Excel_links[2] > -1) and (Excel_links[3] > -1) then
         begin
             id := Suppliers[Form1.SuppliersTree.FocusedNode.Index].id;
 
@@ -74,7 +65,9 @@ begin
             + '(' + id.ToString + ', 0, 3, ' + QuotedStr(Excel_links[2].ToString) + '),'
             + '(' + id.ToString + ', 0, 4, ' + QuotedStr(Excel_links[3].ToString) + '),'
             + '(' + id.ToString + ', 0, 5, ' + QuotedStr(Excel_links[4].ToString) + '),'
-            + '(' + id.ToString + ', 0, 6, ' + QuotedStr(Excel_links[5].ToString) + ')');
+            + '(' + id.ToString + ', 0, 6, ' + QuotedStr(Excel_links[5].ToString) + '),'
+            + '(' + id.ToString + ', 0, 7, ' + QuotedStr(Excel_links[6].ToString) + '),'
+            + '(' + id.ToString + ', 0, 8, ' + QuotedStr(Excel_links[7].ToString) + ')');
 
             ShowMessage('Столбцы успешно привязаны.');
         end

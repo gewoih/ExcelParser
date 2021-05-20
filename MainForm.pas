@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls, System.Win.ComObj,
-  Vcl.Grids, VirtualTrees, TFlatPanelUnit, Vcl.Menus, uBase, uSysCtrls, ClipBrd;
+  Vcl.Grids, VirtualTrees, TFlatPanelUnit, Vcl.Menus, uBase, uSysCtrls, ClipBrd, System.UITypes,
+  Vcl.Tabs;
 
 type
   TForm1 = class(TForm)
@@ -42,6 +43,12 @@ type
     cbDivisions: TComboBox;
     scLoadDivisions: TStringContainer;
     Splitter1: TSplitter;
+    tVolume: TEdit;
+    tStrength: TEdit;
+    Label8: TLabel;
+    Label9: TLabel;
+    FlatPanel4: TFlatPanel;
+    tbExcelTabs: TTabSet;
     procedure FormCreate(Sender: TObject);
     procedure ExcelTreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
@@ -60,11 +67,14 @@ type
     procedure miDeleteSupplierClick(Sender: TObject);
     procedure ExcelTreeKeyPress(Sender: TObject; var Key: Char);
     procedure btUploadPriceClick(Sender: TObject);
+    procedure tbExcelTabsChange(Sender: TObject; NewTab: Integer;
+  var AllowChange: Boolean);
 end;
 
 var
 	Form1:		TForm1;
     fLastNode:	PVirtualNode;
+    tab_index:	integer;
 
 implementation
 
@@ -74,10 +84,7 @@ uses ufAddSupplier, uxExcelLinks, uxSuppliers, uxExcel, uxPreview, uxADO, uxSQL,
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-    if ConnectSQL(fcon) then
-    	LoadSuppliers
-    else
-    	ShowMessage('Не удалось создать подключение.');
+	LoadSuppliers
 end;
 
 procedure TForm1.miAddSupplierClick(Sender: TObject);
@@ -92,10 +99,10 @@ var
 begin
 	V := PreviewArray[Node.RowIndex, Column];
 
-    if VarIsNull(V) then
-    	CellText := ''
+    if (VarIsNull(V)) or (VarIsEmpty(V)) or (VarIsClear(V)) or (VarType(V) = varError) then
+        CellText := ''
     else
-    	CellText := V;
+        CellText := VarToStr(V);
 end;
 
 procedure TForm1.miAddExcelClick(Sender: TObject);
@@ -122,13 +129,14 @@ procedure TForm1.ExcelTreeGetText(Sender: TBaseVirtualTree;
   var CellText: string);
 var
 	V:	Variant;
+    k:	integer;
 begin
-    V := ExcelArray[Node.RowIndex+1, Column+1];
+    V := ExcelArray[tab_index][Node.RowIndex+1, Column+1];
 
-    if VarIsNull(V) then
-    	CellText := ''
+    if (VarIsNull(V)) or (VarIsEmpty(V)) or (VarIsClear(V)) or (VarType(V) = varError) then
+        CellText := ''
     else
-    	CellText := V;
+        CellText := VarToStr(V);
 end;
 
 procedure TForm1.ExcelTreeKeyPress(Sender: TObject; var Key: Char);
@@ -146,6 +154,8 @@ begin
             52: tPriceIn.Text := position;
             53:	tQuantity.Text := position;
             54: tYear.Text := position;
+            55:	tVolume.Text := position;
+            56:	tStrength.Text := position;
         end;
     end;
 end;
@@ -163,8 +173,6 @@ var
 end;
 
 procedure TForm1.btSaveLinksClick(Sender: TObject);
-var
-	id:	integer;
 begin
     SaveLinks;
 
@@ -180,6 +188,7 @@ procedure TForm1.SuppliersTreeFocusChanged(Sender: TBaseVirtualTree;
 begin
     if not Assigned(fLastNode) or (fLastNode.Index <> Node.Index) then
     begin
+    	tbExcelTabs.Tabs.Clear;
         ExcelTree.Clear;
         PreviewTree.Clear;
         DrawLinks;
@@ -201,6 +210,23 @@ begin
     end;
 end;
 
+procedure TForm1.tbExcelTabsChange(Sender: TObject; NewTab: Integer;
+  var AllowChange: Boolean);
+begin
+    if NewTab <> -1 then
+    begin
+    	tab_index := NewTab;
+
+        DrawExcel;
+        DrawLinks;
+        DrawDivisions;
+
+        LoadPreview;
+        DrawPreview;
+    end;
+end;
+
 begin
     FormatSettings.DecimalSeparator := '.';
+
 end.
