@@ -45,10 +45,10 @@ object Form1: TForm1
       Colors.SelectionRectangleBorderColor = 15385233
       Colors.SelectionTextColor = clBlack
       Colors.TreeLineColor = 9471874
-      Colors.UnfocusedColor = 9693824
+      Colors.UnfocusedColor = 9687932
       Colors.UnfocusedSelectionColor = 15385233
       Colors.UnfocusedSelectionBorderColor = 15385233
-      Colors.HeaderColor = 9693824
+      Colors.HeaderColor = 9687932
       DefaultNodeHeight = 25
       Header.AutoSizeIndex = 3
       Header.DefaultHeight = 25
@@ -147,10 +147,10 @@ object Form1: TForm1
         Colors.SelectionRectangleBorderColor = 15385233
         Colors.SelectionTextColor = clBlack
         Colors.TreeLineColor = 9471874
-        Colors.UnfocusedColor = 9693628
+        Colors.UnfocusedColor = 9687736
         Colors.UnfocusedSelectionColor = 15385233
         Colors.UnfocusedSelectionBorderColor = 15385233
-        Colors.HeaderColor = 9693628
+        Colors.HeaderColor = 9687736
         DefaultNodeHeight = 25
         Header.AutoSizeIndex = -1
         Header.DefaultHeight = 25
@@ -168,7 +168,6 @@ object Form1: TForm1
         OnBeforeCellPaint = SuppliersTreeBeforeCellPaint
         OnGetText = ExcelTreeGetText
         OnKeyPress = ExcelTreeKeyPress
-        ExplicitTop = 1
         Columns = <>
       end
       object FlatPanel2: TFlatPanel
@@ -184,8 +183,6 @@ object Form1: TForm1
         Align = alClient
         TabOrder = 1
         UseDockManager = True
-        ExplicitTop = 372
-        ExplicitHeight = 314
         object PreviewTree: TVirtualStringTree
           Left = 1
           Top = 121
@@ -207,10 +204,10 @@ object Form1: TForm1
           Colors.SelectionRectangleBorderColor = 15385233
           Colors.SelectionTextColor = clBlack
           Colors.TreeLineColor = 9471874
-          Colors.UnfocusedColor = 9693432
+          Colors.UnfocusedColor = 9687540
           Colors.UnfocusedSelectionColor = 15385233
           Colors.UnfocusedSelectionBorderColor = 15385233
-          Colors.HeaderColor = 9693432
+          Colors.HeaderColor = 9687540
           DefaultNodeHeight = 25
           Header.AutoSizeIndex = 0
           Header.DefaultHeight = 25
@@ -222,7 +219,6 @@ object Form1: TForm1
           Header.Height = 26
           TabOrder = 0
           OnGetText = PreviewTreeGetText
-          ExplicitHeight = 143
           Columns = <
             item
               CaptionAlignment = taCenter
@@ -432,7 +428,6 @@ object Form1: TForm1
           Align = alBottom
           TabOrder = 2
           UseDockManager = True
-          ExplicitTop = 264
           object label6: TLabel
             Left = 24
             Top = 16
@@ -480,8 +475,6 @@ object Form1: TForm1
         Font.Name = 'Tahoma'
         Font.Style = []
         OnChange = tbExcelTabsChange
-        ExplicitLeft = -23
-        ExplicitTop = -12
       end
     end
   end

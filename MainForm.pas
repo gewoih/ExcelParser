@@ -203,7 +203,7 @@ procedure TForm1.SuppliersTreeGetText(Sender: TBaseVirtualTree;
   var CellText: string);
 begin
     case Column of
-    0: CellText := Suppliers[Node.Index].id.ToString;
+	0: CellText := Suppliers[Node.Index].id.ToString;
     1: CellText := Suppliers[Node.Index].pid.ToString;
     2: CellText := Suppliers[Node.Index].tin;
     3: CellText := Suppliers[Node.Index].name;
@@ -218,15 +218,9 @@ begin
     	tab_index := NewTab;
 
         DrawExcel;
-        DrawLinks;
-        DrawDivisions;
-
-        LoadPreview;
-        DrawPreview;
     end;
 end;
 
 begin
     FormatSettings.DecimalSeparator := '.';
-
 end.

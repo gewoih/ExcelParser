@@ -13,7 +13,7 @@ var
 implementation
 
 uses MainForm, System.Variants, System.Classes, SysUtils, uxSuppliers, Dialogs, System.Win.ComObj,
-uxExcelLinks, uxPreview;
+uxExcelLinks, uxPreview, uxDivisions;
 
 procedure DrawExcel;
 procedure SetTreeColumns;
@@ -81,7 +81,13 @@ begin
 
             	ExcelArray[i-1] := Sheet.UsedRange.Value;
             end;
-            Form1.tbExcelTabs.TabIndex := 0;
+			Form1.tbExcelTabs.TabIndex := 0;
+			
+			DrawLinks;
+			DrawDivisions;
+			
+			LoadPreview;
+			DrawPreview;
         finally
         	Sheet := Unassigned;
             Excel.Quit;
